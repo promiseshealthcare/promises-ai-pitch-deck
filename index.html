@@ -1,0 +1,3788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promises AI — China AI Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Josefin+Sans:wght@100;200;300;400&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:       #0D1B2A;
+  --teal:       #2A7F6F;
+  --teal-light: #3BA893;
+  --gold:       #C9A84C;
+  --gold-light: #E2C97E;
+  --white:      #FFFFFF;
+  --serif:      'Cormorant Garamond', Georgia, serif;
+  --sans:       'DM Sans', system-ui, sans-serif;
+  --display:    'Josefin Sans', 'Futura', 'Century Gothic', sans-serif;
+  --page-w:     794px;
+  --page-h:     1123px;
+  --pad-x:      56px;
+  --pad-y:      60px;
+}
+
+html, body {
+  background: #111;
+  font-family: var(--sans);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── PAGE BASE ── */
+.page {
+  width: var(--page-w);
+  height: var(--page-h);
+  margin: 24px auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--teal), var(--gold), var(--teal-light));
+  z-index: 2;
+}
+
+.corner-mark {
+  position: absolute;
+  bottom: var(--pad-y);
+  right: var(--pad-x);
+  width: 40px; height: 40px;
+  border-right: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold);
+  opacity: 0.35;
+}
+
+.corner-mark-tl {
+  position: absolute;
+  top: 56px; left: var(--pad-x);
+  width: 28px; height: 28px;
+  border-left: 1px solid var(--teal);
+  border-top: 1px solid var(--teal);
+  opacity: 0.4;
+}
+
+/* ══════════════════════════════════════
+   COVER — dark navy
+   ══════════════════════════════════════ */
+.cover {
+  background: var(--navy);
+  padding: var(--pad-y) var(--pad-x);
+  justify-content: space-between;
+}
+
+.bg-texture {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(42,127,111,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.cover-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative; z-index: 1;
+}
+
+.brand-name {
+  font-family: var(--display);
+  font-size: 12px; font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+.brand-sub {
+  font-family: var(--sans);
+  font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold); opacity: 0.7;
+  margin-top: 5px;
+}
+
+.doc-label {
+  font-family: var(--sans);
+  font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8A9BB0; text-align: right;
+  line-height: 1.9;
+}
+
+.cover-hero {
+  flex: 1;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 60px 0 32px;
+  position: relative; z-index: 1;
+}
+
+.cover-eyebrow {
+  font-family: var(--sans);
+  font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold); opacity: 0.85;
+  margin-bottom: 28px;
+}
+
+.cover-title {
+  font-family: var(--display);
+  font-size: 88px; font-weight: 200;
+  line-height: 1.0;
+  color: var(--white);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cover-title .ai-word { color: var(--gold-light); }
+
+.cover-subtitle {
+  font-family: var(--serif);
+  font-size: 22px; font-weight: 300;
+  font-style: italic; color: #8A9BB0;
+  margin-top: 20px; line-height: 1.5;
+}
+
+.cover-rule {
+  width: 64px; height: 1px;
+  background: var(--gold);
+  margin: 32px 0; opacity: 0.5;
+}
+
+.cover-descriptor {
+  font-family: var(--sans);
+  font-size: 13px; font-weight: 300;
+  color: #8A9BB0; line-height: 1.85;
+  max-width: 480px;
+}
+
+.cover-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px; padding-top: 32px;
+  border-top: 1px solid rgba(201,168,76,0.2);
+  position: relative; z-index: 1;
+}
+
+.footer-stat { display: flex; flex-direction: column; gap: 6px; }
+
+.footer-stat-value {
+  font-family: var(--serif);
+  font-size: 32px; font-weight: 400;
+  color: var(--gold-light);
+  letter-spacing: -0.02em;
+}
+
+.footer-stat-label {
+  font-family: var(--sans);
+  font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8A9BB0; line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   CONTENT SLIDES — light cream
+   ══════════════════════════════════════ */
+.slide {
+  background: #F7F4EF;
+  padding: var(--pad-y) var(--pad-x);
+  justify-content: flex-start;
+}
+
+.slide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(13,27,42,0.12);
+}
+
+.slide-brand {
+  font-family: var(--display);
+  font-size: 12px; font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.55);
+}
+
+.slide-label {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.slide-title {
+  font-family: var(--display);
+  font-size: 34px; font-weight: 200;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy);
+  line-height: 1.15; margin-bottom: 4px;
+}
+
+.slide-title span { color: var(--teal); }
+
+.slide-divider {
+  width: 48px; height: 2px;
+  background: var(--gold);
+  margin: 14px 0 24px;
+}
+
+/* ── WHY NOW ── */
+.policy-grid {
+  display: flex; flex-direction: column;
+  gap: 0; margin-bottom: 22px;
+}
+
+.policy-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 20px; align-items: start;
+  padding: 14px 0;
+}
+
+.policy-tag {
+  display: flex; flex-direction: column;
+  gap: 4px; padding-top: 2px;
+}
+
+.policy-tag-source {
+  font-family: var(--sans);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.policy-tag-date {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 400;
+  color: #2A3A4A;
+}
+
+.policy-title {
+  font-family: var(--sans);
+  font-size: 14px; font-weight: 600;
+  color: var(--navy); margin-bottom: 5px;
+}
+
+.policy-desc {
+  font-family: var(--sans);
+  font-size: 13px; font-weight: 400;
+  color: #1E2D3D; line-height: 1.7;
+}
+
+.policy-desc strong {
+  color: var(--navy); font-weight: 600;
+}
+
+.policy-rule {
+  width: 100%; height: 1px;
+  background: rgba(13,27,42,0.1);
+}
+
+.window-box {
+  background: rgba(42,127,111,0.07);
+  border: 1px solid rgba(42,127,111,0.25);
+  border-left: 3px solid var(--teal);
+  border-radius: 3px; padding: 16px 20px;
+}
+
+.window-box-title {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal); margin-bottom: 8px;
+}
+
+.window-box-text {
+  font-family: var(--sans);
+  font-size: 13px; font-weight: 400;
+  color: #1E2D3D; line-height: 1.75;
+}
+
+/* ── MARKET SLIDE ── */
+.market-intro {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  color: #2A3A4A;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  padding-left: 16px;
+  border-left: 3px solid var(--gold);
+}
+
+.market-tiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.market-tier {
+  background: white;
+  border: 1px solid rgba(13,27,42,0.1);
+  border-top: 3px solid var(--teal);
+  border-radius: 3px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.market-tier.som {
+  border-top-color: var(--gold);
+  background: rgba(201,168,76,0.04);
+}
+
+.market-tier-label {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--teal);
+  line-height: 1.4;
+}
+
+.market-tier.som .market-tier-label {
+  color: #9A7A2A;
+}
+
+.market-tier-name {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  font-style: italic;
+  color: #2A3A4A;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.market-tier-value {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 400;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.market-tier-desc {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.7;
+  margin-top: 4px;
+}
+
+.market-note {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.8;
+  padding: 18px 20px;
+  background: rgba(13,27,42,0.04);
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.market-note strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.market-narrative {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.market-narrative-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid rgba(13,27,42,0.08);
+  border-radius: 3px;
+}
+
+.market-narrative-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.market-narrative-text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+}
+
+.market-narrative-text strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+/* ── PROBLEM SLIDE ── */
+.problem-stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(13,27,42,0.1);
+  border-bottom: 1px solid rgba(13,27,42,0.1);
+}
+
+.problem-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.problem-stat-value {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 400;
+  color: var(--teal);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.problem-stat-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.5;
+}
+
+.problem-stat-label span {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  color: #4A5A6A;
+  margin-top: 3px;
+  font-style: italic;
+}
+.problem-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 24px;
+}
+
+.problem-block {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 20px;
+  align-items: start;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(13,27,42,0.1);
+}
+
+.problem-block:last-child {
+  border-bottom: none;
+}
+
+.problem-block-number {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--teal);
+  opacity: 0.5;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.problem-block-title {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 7px;
+}
+
+.problem-block-desc {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.75;
+}
+
+.problem-block-desc strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.problem-gap-box {
+  background: rgba(201,168,76,0.07);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: 3px;
+  padding: 18px 20px;
+}
+
+.problem-gap-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9A7A2A;
+  margin-bottom: 10px;
+}
+
+.problem-gap-text {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--navy);
+  line-height: 1.65;
+}
+
+.problem-gap-text strong {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+/* ── SOLUTION SLIDE ── */
+.sol-section-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+
+.sol-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 8px 20px;
+  margin-bottom: 10px;
+}
+
+.sol-tier {
+  background: white;
+  border-left: 3px solid var(--teal);
+  border-radius: 3px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: center;
+}
+
+.sol-tier-2 { border-left-color: var(--teal-light); }
+.sol-tier-3 { border-left-color: var(--gold); }
+
+.sol-tier-tag {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.sol-tier-2 .sol-tier-tag { color: var(--teal-light); }
+.sol-tier-3 .sol-tier-tag { color: #9A7A2A; }
+
+.sol-tier-name {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.sol-tier-desc {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.6;
+  background: white;
+  border-radius: 3px;
+  padding: 10px 14px;
+  border: 1px solid rgba(13,27,42,0.08);
+  display: flex;
+  align-items: center;
+}
+
+.sol-guo-bar {
+  background: rgba(13,27,42,0.04);
+  border-top: 2px solid var(--navy);
+  border-radius: 3px;
+  padding: 8px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+}
+
+.sol-guo-name {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+.sol-guo-desc {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.55;
+}
+
+/* Diamond tech stack section */
+.sol-diamond-section {
+  display: grid;
+  grid-template-columns: 1fr 220px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.sol-diamond-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-right: 12px;
+}
+
+.sol-diamond-label-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sol-diamond-label-name {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teal);
+}
+
+.sol-diamond-label-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.55;
+}
+
+.sol-diamond-centre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sol-diamond-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.sol-promises-box {
+  background: rgba(13,27,42,0.04);
+  border-left: 3px solid var(--navy);
+  border-radius: 3px;
+  padding: 12px 14px;
+}
+
+.sol-promises-box-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.sol-promises-box-text {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+  margin-bottom: 8px;
+}
+
+.sol-promises-box-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sol-promises-box-item {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 400;
+  color: #1E2D3D;
+  padding-left: 10px;
+  position: relative;
+}
+
+.sol-promises-box-item::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.sol-compliance-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.sol-compliance-tag {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: rgba(42,127,111,0.08);
+  border: 1px solid rgba(42,127,111,0.2);
+  border-radius: 2px;
+  padding: 3px 8px;
+}
+
+/* ── WHY WE WILL WIN SLIDE ── */
+.win-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.win-2x2-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0;
+  position: relative;
+  height: 320px;
+  border: 1px solid rgba(13,27,42,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Quadrant fills */
+.win-q {
+  padding: 12px 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.win-q-tl { background: rgba(13,27,42,0.03); border-right: 1px solid rgba(13,27,42,0.08); border-bottom: 1px solid rgba(13,27,42,0.08); }
+.win-q-tr { background: rgba(42,127,111,0.05); border-bottom: 1px solid rgba(13,27,42,0.08); }
+.win-q-bl { background: rgba(13,27,42,0.02); border-right: 1px solid rgba(13,27,42,0.08); }
+.win-q-br { background: rgba(201,168,76,0.04); }
+
+.win-q-label {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(13,27,42,0.35);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Axis labels */
+.win-axis-x {
+  position: absolute;
+  bottom: -24px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(13,27,42,0.45);
+  letter-spacing: 0.06em;
+}
+
+.win-axis-y {
+  position: absolute;
+  left: -80px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  width: 160px;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(13,27,42,0.45);
+  letter-spacing: 0.06em;
+}
+
+/* Competitor dots */
+.win-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.win-dot-circle {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(13,27,42,0.25);
+}
+
+.win-dot-label {
+  font-family: var(--sans);
+  font-size: 8.5px;
+  font-weight: 400;
+  color: rgba(13,27,42,0.55);
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Promises AI dot */
+.win-dot-promises .win-dot-circle {
+  width: 12px;
+  height: 12px;
+  background: var(--teal);
+  box-shadow: 0 0 0 3px rgba(42,127,111,0.2);
+}
+
+.win-dot-promises .win-dot-label {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--teal);
+  text-transform: uppercase;
+}
+
+/* Moat statement */
+.win-moat-statement {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--navy);
+  line-height: 1.5;
+  padding-left: 18px;
+  border-left: 3px solid var(--gold);
+}
+
+/* Three moat points */
+.win-moat-points {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.win-moat-point {
+  background: white;
+  border-radius: 3px;
+  border-top: 2px solid var(--teal);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.win-moat-point-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.win-moat-point-desc {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+}
+
+/* ── BUSINESS MODEL SLIDE ── */
+.bm-section-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+
+/* Pricing table */
+.bm-plans {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.bm-plan {
+  background: white;
+  border-radius: 4px;
+  border-top: 3px solid var(--teal);
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bm-plan-2 { border-top-color: var(--navy); }
+.bm-plan-3 { border-top-color: var(--gold); }
+
+.bm-plan-tag {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.bm-plan-2 .bm-plan-tag { color: var(--navy); }
+.bm-plan-3 .bm-plan-tag { color: #9A7A2A; }
+
+.bm-plan-name {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.bm-plan-price {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 400;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 4px 0;
+}
+
+.bm-plan-price-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #4A5A6A;
+}
+
+.bm-plan-rule {
+  width: 100%;
+  height: 1px;
+  background: rgba(13,27,42,0.08);
+  margin: 4px 0;
+}
+
+.bm-plan-includes {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.6;
+}
+
+.bm-plan-mix {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+  margin-top: 4px;
+}
+
+.bm-plan-2 .bm-plan-mix { color: var(--navy); }
+.bm-plan-3 .bm-plan-mix { color: #9A7A2A; }
+
+/* ARPU row */
+.bm-arpu-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.bm-arpu-box {
+  background: white;
+  border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bm-arpu-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.45);
+}
+
+.bm-arpu-value {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.bm-arpu-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #4A5A6A;
+}
+
+/* Unit economics */
+.bm-unit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bm-cogs-box {
+  background: white;
+  border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08);
+  padding: 14px 16px;
+}
+
+.bm-cogs-title {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.45);
+  margin-bottom: 10px;
+}
+
+.bm-cogs-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+}
+
+.bm-cogs-item:last-child { border-bottom: none; }
+
+.bm-cogs-name {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+}
+
+.bm-cogs-val {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.bm-cogs-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 2px solid var(--navy);
+}
+
+.bm-cogs-total-name {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.bm-cogs-total-val {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--navy);
+}
+
+.bm-fte-note {
+  background: rgba(13,27,42,0.03);
+  border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.bm-fte-note-title {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.45);
+}
+
+.bm-fte-note-text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+}
+
+/* GM callout */
+.bm-gm-callout {
+  background: rgba(42,127,111,0.07);
+  border: 1px solid rgba(42,127,111,0.2);
+  border-left: 3px solid var(--teal);
+  border-radius: 3px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.bm-gm-number {
+  font-family: var(--serif);
+  font-size: 52px;
+  font-weight: 400;
+  color: var(--teal);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.bm-gm-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.bm-gm-label {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.bm-gm-sub {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.6;
+}
+
+/* ── SALES FORECAST SLIDE ── */
+.sf-intro {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: rgba(13,27,42,0.03);
+  border-radius: 3px;
+  border-left: 3px solid var(--teal);
+}
+.sf-intro strong { color: var(--navy); font-weight: 600; }
+
+.sf-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.sf-table th {
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(13,27,42,0.45); padding: 0 16px 10px;
+  text-align: left; border-bottom: 1px solid rgba(13,27,42,0.12);
+}
+.sf-table th:not(:first-child) { text-align: right; }
+.sf-table td {
+  font-family: var(--sans); font-size: 13px; font-weight: 400;
+  color: #1E2D3D; padding: 11px 16px;
+  border-bottom: 1px solid rgba(13,27,42,0.07); text-align: left;
+}
+.sf-table td:not(:first-child) { text-align: right; }
+.sf-table tr:last-child td { border-bottom: none; }
+.sf-table td.sf-q { font-weight: 600; color: var(--navy); }
+.sf-table td.sf-rev { font-family: var(--serif); font-size: 15px; font-weight: 400; color: var(--navy); }
+.sf-table tr.sf-total td { border-top: 2px solid var(--navy); font-weight: 700; color: var(--navy); padding-top: 13px; }
+.sf-table tr.sf-total td.sf-rev { font-family: var(--serif); font-size: 18px; color: var(--teal); }
+
+.sf-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+
+.sf-stats { display: flex; flex-direction: column; gap: 12px; }
+.sf-stat {
+  background: white; border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08); padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.sf-stat-label {
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: rgba(13,27,42,0.4);
+}
+.sf-stat-value {
+  font-family: var(--serif); font-size: 28px; font-weight: 400;
+  color: var(--navy); letter-spacing: -0.02em; line-height: 1;
+}
+.sf-stat-value.sf-highlight { color: var(--teal); }
+.sf-stat-sub { font-family: var(--sans); font-size: 11px; font-weight: 400; color: #4A5A6A; }
+
+.sf-bar-section { display: flex; flex-direction: column; gap: 8px; }
+.sf-bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; }
+.sf-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
+.sf-bar { width: 100%; border-radius: 3px 3px 0 0; background: var(--teal); opacity: 0.8; min-height: 4px; }
+.sf-bar-qlabel { font-family: var(--sans); font-size: 10px; font-weight: 500; color: rgba(13,27,42,0.45); }
+.sf-bar-baseline { width: 100%; height: 1px; background: rgba(13,27,42,0.15); }
+.sf-bar-val { font-family: var(--sans); font-size: 10px; font-weight: 600; color: var(--teal); }
+
+.sf-note {
+  font-family: var(--sans); font-size: 12px; font-weight: 400;
+  color: #1E2D3D; line-height: 1.7; padding: 12px 16px;
+  background: rgba(13,27,42,0.03); border-radius: 3px; margin-top: 12px;
+}
+.sf-note strong { color: var(--navy); font-weight: 600; }
+
+/* ── GTM SLIDE ── */
+.gtm-body { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+.gtm-col-title {
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 12px;
+}
+
+.gtm-partners { display: flex; flex-direction: column; gap: 10px; margin-bottom: 0; }
+
+.gtm-partner {
+  background: white; border-radius: 3px;
+  border-left: 3px solid var(--teal);
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.gtm-partner.overflow { border-left-color: var(--gold); }
+
+.gtm-partner-name {
+  font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--navy);
+}
+
+.gtm-partner-type {
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal);
+}
+
+.gtm-partner.overflow .gtm-partner-type { color: #9A7A2A; }
+
+.gtm-partner-why {
+  font-family: var(--sans); font-size: 12px; font-weight: 400;
+  color: #1E2D3D; line-height: 1.6;
+}
+
+.gtm-partner-locs {
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  color: #4A5A6A; font-style: italic;
+}
+
+/* Right col — referral pathway */
+.gtm-pathway { display: flex; flex-direction: column; gap: 0; }
+
+.gtm-pathway-step {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(13,27,42,0.07);
+}
+
+.gtm-pathway-step:last-child { border-bottom: none; }
+
+.gtm-step-num {
+  font-family: var(--serif); font-size: 22px; font-weight: 300;
+  color: var(--teal); opacity: 0.5; line-height: 1;
+  min-width: 28px; padding-top: 1px;
+}
+
+.gtm-step-content { display: flex; flex-direction: column; gap: 3px; }
+
+.gtm-step-title {
+  font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--navy);
+}
+
+.gtm-step-desc {
+  font-family: var(--sans); font-size: 12px; font-weight: 400;
+  color: #1E2D3D; line-height: 1.65;
+}
+
+.gtm-zero-cac {
+  background: rgba(42,127,111,0.07);
+  border: 1px solid rgba(42,127,111,0.2);
+  border-left: 3px solid var(--teal);
+  border-radius: 3px; padding: 14px 16px;
+  margin-top: 16px;
+}
+
+.gtm-zero-cac-title {
+  font-family: var(--sans); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 6px;
+}
+
+.gtm-zero-cac-text {
+  font-family: var(--sans); font-size: 12px; font-weight: 400;
+  color: #1E2D3D; line-height: 1.65;
+}
+
+.gtm-zero-cac-text strong { color: var(--navy); font-weight: 600; }
+
+/* ── GTM SLIDE ── */
+.gtm-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.gtm-left { display: flex; flex-direction: column; gap: 16px; }
+.gtm-right { display: flex; flex-direction: column; gap: 16px; }
+
+.gtm-section-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+/* Pre-launch box */
+.gtm-prelaunch {
+  background: rgba(13,27,42,0.04);
+  border-left: 3px solid var(--navy);
+  border-radius: 3px;
+  padding: 12px 14px;
+}
+
+.gtm-prelaunch-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+
+.gtm-prelaunch-item {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+  padding-left: 12px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.gtm-prelaunch-item::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* Partner table */
+.gtm-partner-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gtm-partner-table th {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.4);
+  padding: 0 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(13,27,42,0.12);
+}
+
+.gtm-partner-table td {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+  vertical-align: top;
+}
+
+.gtm-partner-table td:first-child {
+  font-weight: 600;
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+.gtm-partner-table tr:last-child td { border-bottom: none; }
+
+.gtm-caveat {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
+  color: #6A7A8A;
+  margin-top: 4px;
+}
+
+/* Overflow box */
+.gtm-overflow {
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-left: 3px solid var(--gold);
+  border-radius: 3px;
+  padding: 10px 14px;
+}
+
+.gtm-overflow-title {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: #9A7A2A;
+  margin-bottom: 4px;
+}
+
+.gtm-overflow-text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.6;
+}
+
+/* Referral pathway */
+.gtm-pathway {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.gtm-pathway-step {
+  background: white;
+  border-left: 3px solid var(--teal);
+  border-radius: 3px;
+  padding: 9px 12px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--navy);
+}
+
+.gtm-pathway-arrow {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: rgba(13,27,42,0.3);
+  padding: 3px 12px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.gtm-pathway-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.gtm-split-item {
+  background: white;
+  border-radius: 3px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 2px solid var(--teal);
+}
+
+.gtm-split-item:nth-child(2) { border-top-color: var(--navy); }
+.gtm-split-item:nth-child(3) { border-top-color: var(--gold); }
+
+.gtm-split-plan {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.gtm-split-item:nth-child(2) .gtm-split-plan { color: var(--navy); }
+.gtm-split-item:nth-child(3) .gtm-split-plan { color: #9A7A2A; }
+
+.gtm-split-mix {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.gtm-split-desc {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  color: #4A5A6A;
+  line-height: 1.4;
+}
+
+/* Zero CAC callout */
+.gtm-cac-bar {
+  background: rgba(42,127,111,0.07);
+  border: 1px solid rgba(42,127,111,0.2);
+  border-left: 3px solid var(--teal);
+  border-radius: 3px;
+  padding: 10px 14px;
+}
+
+.gtm-cac-text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+}
+
+.gtm-cac-text strong { color: var(--navy); font-weight: 600; }
+
+/* ── EXPANSION PLAN SLIDE ── */
+.exp-phases {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.exp-phase {
+  background: white;
+  border-radius: 4px;
+  border-top: 3px solid var(--teal);
+  padding: 12px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exp-phase-2 { border-top-color: var(--teal-light); }
+.exp-phase-3 { border-top-color: #8A7A4A; }
+.exp-phase-4 { border-top-color: var(--navy); }
+
+.exp-phase-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.exp-phase-num {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--teal);
+  line-height: 1;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.exp-phase-2 .exp-phase-num { color: var(--teal-light); }
+.exp-phase-3 .exp-phase-num { color: #8A7A4A; }
+.exp-phase-4 .exp-phase-num { color: var(--navy); }
+
+.exp-phase-info { flex: 1; }
+
+.exp-phase-city {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.exp-phase-years {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(13,27,42,0.4);
+  letter-spacing: 0.06em;
+}
+
+.exp-phase-tag {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: rgba(42,127,111,0.08);
+  border-radius: 2px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.exp-phase-2 .exp-phase-tag { color: var(--teal-light); background: rgba(59,168,147,0.08); }
+.exp-phase-3 .exp-phase-tag { color: #8A7A4A; background: rgba(138,122,74,0.08); }
+.exp-phase-4 .exp-phase-tag { color: var(--navy); background: rgba(13,27,42,0.06); }
+
+.exp-phase-desc {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+}
+
+.exp-phase-reg {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--teal);
+  line-height: 1.5;
+  font-style: italic;
+  border-top: 1px solid rgba(13,27,42,0.07);
+  padding-top: 7px;
+}
+
+.exp-phase-2 .exp-phase-reg { color: var(--teal-light); }
+.exp-phase-3 .exp-phase-reg { color: #8A7A4A; }
+.exp-phase-4 .exp-phase-reg { color: rgba(13,27,42,0.5); }
+
+/* Gate conditions */
+.exp-gates-section { margin-bottom: 14px; }
+
+.exp-gates-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.4);
+  margin-bottom: 8px;
+}
+
+.exp-gates {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.exp-gate {
+  background: rgba(13,27,42,0.03);
+  border-radius: 3px;
+  border: 1px solid rgba(13,27,42,0.08);
+  border-left: 2px solid var(--gold);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.exp-gate-metric {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+}
+
+.exp-gate-sub {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  color: #4A5A6A;
+}
+
+.exp-gate-why {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--teal);
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* Revenue trajectory */
+.exp-revenue {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08);
+  padding: 12px 16px;
+}
+
+.exp-rev-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.exp-rev-item:first-child { padding-left: 0; }
+.exp-rev-item:last-child { padding-right: 0; }
+
+.exp-rev-phase {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.exp-rev-text {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.5;
+}
+
+.exp-rev-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(13,27,42,0.1);
+  flex-shrink: 0;
+}
+
+/* ── TEAM SLIDE ── */
+.team-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.team-left { display: flex; flex-direction: column; gap: 12px; }
+.team-right { display: flex; flex-direction: column; gap: 12px; }
+
+.team-member {
+  background: white;
+  border-radius: 4px;
+  border-left: 3px solid var(--teal);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.team-member.tbc { border-left-color: rgba(13,27,42,0.2); background: rgba(13,27,42,0.02); }
+.team-member.promises-ip { border-left-color: var(--gold); }
+
+.team-member-role {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.team-member.tbc .team-member-role { color: rgba(13,27,42,0.35); }
+.team-member.promises-ip .team-member-role { color: #9A7A2A; }
+
+.team-member-name {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: var(--navy);
+}
+
+.team-member-desc {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.65;
+}
+
+.team-member-focus {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--teal);
+  font-style: italic;
+  border-top: 1px solid rgba(13,27,42,0.07);
+  padding-top: 5px;
+  margin-top: 2px;
+  line-height: 1.5;
+}
+
+.team-member.tbc .team-member-focus { color: rgba(13,27,42,0.4); }
+.team-member.promises-ip .team-member-focus { color: #9A7A2A; }
+
+.team-status {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #C45A00;
+  margin-top: 2px;
+}
+
+/* Advisory table */
+.team-advisory {
+  background: rgba(13,27,42,0.03);
+  border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08);
+  padding: 12px 14px;
+}
+
+.team-advisory-title {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.4);
+  margin-bottom: 8px;
+}
+
+.team-advisory-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+}
+
+.team-advisory-row:last-child { border-bottom: none; }
+
+.team-advisory-role {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.team-advisory-name {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.5;
+}
+
+/* Have/Need table */
+.team-have-need {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.team-have, .team-need {
+  background: white;
+  border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08);
+  padding: 10px 12px;
+}
+
+.team-have { border-top: 2px solid var(--teal); }
+.team-need { border-top: 2px solid #C45A00; }
+
+.team-have-title, .team-need-title {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 7px;
+}
+
+.team-need-title { color: #C45A00; }
+
+.team-have-item, .team-need-item {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+  line-height: 1.4;
+}
+
+.team-have-item:last-child, .team-need-item:last-child { border-bottom: none; }
+
+/* ── FUNDING NEEDS SLIDE ── */
+.fn-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.fn-left { display: flex; flex-direction: column; gap: 14px; }
+.fn-right { display: flex; flex-direction: column; gap: 14px; }
+
+.fn-section-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+/* Use of funds table */
+.fn-table { width: 100%; border-collapse: collapse; }
+.fn-table-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+  align-items: baseline;
+}
+.fn-table-row:last-child { border-bottom: none; }
+.fn-table-row.fn-subtotal {
+  border-top: 1px solid rgba(13,27,42,0.15);
+  border-bottom: none;
+  padding-top: 5px;
+  margin-top: 2px;
+}
+.fn-table-row.fn-total {
+  border-top: 2px solid var(--navy);
+  border-bottom: none;
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+.fn-cat {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.4);
+  padding: 6px 0 2px;
+  grid-column: 1 / -1;
+}
+
+.fn-item-name {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #1E2D3D;
+}
+
+.fn-item-val {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--navy);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fn-subtotal .fn-item-name { font-weight: 700; color: var(--navy); }
+.fn-subtotal .fn-item-val { font-weight: 700; color: var(--navy); }
+.fn-total .fn-item-name {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.fn-total .fn-item-val {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--teal);
+}
+
+/* Cap table */
+.fn-cap-table { width: 100%; border-collapse: collapse; }
+.fn-cap-table th {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.4);
+  padding: 0 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(13,27,42,0.12);
+}
+.fn-cap-table td {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #1E2D3D;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+  vertical-align: top;
+}
+.fn-cap-table td:first-child { font-weight: 600; color: var(--navy); }
+.fn-cap-table tr:last-child td { border-bottom: none; font-weight: 700; }
+.fn-equity {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--teal);
+}
+
+/* Investor return */
+.fn-return-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.fn-return-item {
+  background: white;
+  border-radius: 3px;
+  border: 1px solid rgba(13,27,42,0.08);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fn-return-label {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,0.4);
+}
+
+.fn-return-value {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.fn-return-value.fn-highlight { color: var(--teal); }
+
+/* Key messages */
+.fn-messages { display: flex; flex-direction: column; gap: 6px; }
+.fn-message {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.6;
+  padding: 8px 12px;
+  background: rgba(42,127,111,0.05);
+  border-left: 2px solid var(--teal);
+  border-radius: 2px;
+}
+.fn-message strong { color: var(--navy); font-weight: 600; }
+
+/* ── INVESTOR LIST SLIDE ── */
+.inv-context {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--navy);
+  line-height: 1.55;
+  margin-bottom: 20px;
+  padding-left: 16px;
+  border-left: 3px solid var(--gold);
+}
+
+.inv-tier-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inv-tier-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(13,27,42,0.1);
+}
+
+.inv-tier-1-label { color: #B22222; }
+.inv-tier-2-label { color: #9A7A2A; }
+.inv-tier-3-label { color: rgba(13,27,42,0.4); }
+
+.inv-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.inv-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.inv-grid-3b { grid-template-columns: 1fr 1fr 1fr; }
+.inv-grid-1 { grid-template-columns: 1fr; }
+
+.inv-card {
+  background: white;
+  border-radius: 4px;
+  border: 1px solid rgba(13,27,42,0.08);
+  border-top: 3px solid #B22222;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.inv-card.t2 { border-top-color: #9A7A2A; }
+.inv-card.t3 { border-top-color: rgba(13,27,42,0.2); }
+
+.inv-card-priority {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B22222;
+}
+
+.inv-card.t2 .inv-card-priority { color: #9A7A2A; }
+.inv-card.t3 .inv-card-priority { color: rgba(13,27,42,0.35); }
+
+.inv-card-name {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.inv-card-type {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  color: #4A5A6A;
+}
+
+.inv-card-ask {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+  margin-top: 2px;
+}
+
+.inv-card-approach {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.5;
+  border-top: 1px solid rgba(13,27,42,0.07);
+  padding-top: 5px;
+  margin-top: 2px;
+}
+
+/* ── RISKS & MITIGATIONS SLIDE ── */
+.risk-body { display: flex; flex-direction: column; gap: 10px; }
+
+.risk-category-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+  margin-top: 4px;
+}
+
+.risk-category-label.risk-cat-2 { color: var(--navy); }
+.risk-category-label.risk-cat-3 { color: #9A7A2A; }
+
+.risk-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(13,27,42,0.07);
+}
+
+.risk-row:last-child { border-bottom: none; }
+
+.risk-num {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--teal);
+  opacity: 0.5;
+  padding-top: 1px;
+}
+
+.risk-cat-2-num { color: var(--navy); }
+.risk-cat-3-num { color: #9A7A2A; }
+
+.risk-left { display: flex; flex-direction: column; gap: 3px; }
+.risk-right { display: flex; flex-direction: column; gap: 3px; }
+
+.risk-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.risk-desc {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.6;
+}
+
+.risk-mit-label {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 2px;
+}
+
+.risk-mit-desc {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: #1E2D3D;
+  line-height: 1.6;
+}
+
+.risk-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(13,27,42,0.08);
+  margin: 4px 0;
+}
+
+@media print {
+  body { background: white; }
+  .page { margin: 0; page-break-after: always; break-after: page; }
+  .pdf-export-btn { display: none; }
+}
+
+/* PDF Export Button */
+.pdf-export-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: #0D1B2A;
+  color: #E2C97E;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 3px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.pdf-export-btn:hover {
+  background: #1E3A52;
+  border-color: rgba(201,168,76,0.8);
+}
+
+</style>
+</head>
+<body>
+
+<button class="pdf-export-btn" onclick="window.print()">Export PDF</button>
+
+<!-- ══════════════════════════════════════ -->
+<!-- COVER PAGE                            -->
+<!-- ══════════════════════════════════════ -->
+<div class="page cover">
+  <div class="bg-texture"></div>
+  <div class="bg-grid"></div>
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="cover-top">
+    <div>
+      <div class="brand-name">Promises Healthcare</div>
+      <div class="brand-sub">China AI Practice</div>
+    </div>
+    <div class="doc-label">
+      Investor Presentation<br>
+      Confidential · May 2026
+    </div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-eyebrow">Shanghai · Stepped Care · AI / Human Hybrid</div>
+    <div class="cover-title">Promises <span class="ai-word">AI</span></div>
+    <div class="cover-subtitle">
+      Closing the between-session gap in China's<br>premium private mental health market
+    </div>
+    <div class="cover-rule"></div>
+    <div class="cover-descriptor">
+      A WeChat-native, AI/human hybrid stepped care platform delivering psychiatric-grade mental health support to Shanghai's premium private patients — backed by 30+ years of Promises Healthcare clinical IP and a closed-loop clinical governance model built for China.
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div class="footer-stat">
+      <div class="footer-stat-value">SGD 4.5M</div>
+      <div class="footer-stat-label">Pre-Series A<br>Founding Round</div>
+    </div>
+    <div class="footer-stat">
+      <div class="footer-stat-value">~97%</div>
+      <div class="footer-stat-label">Blended Gross<br>Margin</div>
+    </div>
+    <div class="footer-stat">
+      <div class="footer-stat-value">¥41.6M</div>
+      <div class="footer-stat-label">Year 1 Revenue<br>(Subscription + First Consult)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 1 — WHY NOW                     -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Why Now</div>
+  </div>
+
+  <div class="slide-title">The AI Healthcare<br><span>Sandbox Window Is Now</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="policy-grid">
+
+    <div class="policy-item">
+      <div class="policy-tag">
+        <div class="policy-tag-source">State Council</div>
+        <div class="policy-tag-date">27 Aug 2025</div>
+      </div>
+      <div>
+        <div class="policy-title">AI+ Mandate — Mental Health a National Priority</div>
+        <div class="policy-desc">People's well-being (民生) is one of six sectors under China's Cabinet AI+ mandate. <strong>AI agent penetration must reach 70% by 2027.</strong> Hospital administrators are under pressure to adopt AI tools now.</div>
+      </div>
+    </div>
+    <div class="policy-rule"></div>
+
+    <div class="policy-item">
+      <div class="policy-tag">
+        <div class="policy-tag-source">NHC</div>
+        <div class="policy-tag-date">4 Nov 2025</div>
+      </div>
+      <div>
+        <div class="policy-title">CNY 15–20B Investment — 50-Hospital Pilot Active Now</div>
+        <div class="policy-desc">National Health Commission allocated CNY 15–20B over five years. <strong>The April–December 2026 pilot is live.</strong> Private hospital groups are leveraging AI+ tailwinds to stay competitive against a newly empowered public tier.</div>
+      </div>
+    </div>
+    <div class="policy-rule"></div>
+
+    <div class="policy-item">
+      <div class="policy-tag">
+        <div class="policy-tag-source">Shanghai</div>
+        <div class="policy-tag-date">Dec 2024</div>
+      </div>
+      <div>
+        <div class="policy-title">Shanghai Medical AI Plan 2025–2027</div>
+        <div class="policy-desc">City-level programme covering clinical medicine, TCM, and health management. <strong>China's first Medical Large Model Verification Centre</strong> launched January 2025 — a future validation pathway for Promises AI.</div>
+      </div>
+    </div>
+    <div class="policy-rule"></div>
+
+    <div class="policy-item">
+      <div class="policy-tag">
+        <div class="policy-tag-source">MOFCOM</div>
+        <div class="policy-tag-date">10 Feb 2026</div>
+      </div>
+      <div>
+        <div class="policy-title">2026 Encouraged Service Imports Catalogue</div>
+        <div class="policy-desc">Medical services and AI digital technologies listed as <strong>encouraged import categories</strong> for the first time since 2019. A positive regulatory signal for foreign-invested AI health ventures entering China.</div>
+      </div>
+    </div>
+    <div class="policy-rule"></div>
+
+    <div class="policy-item">
+      <div class="policy-tag">
+        <div class="policy-tag-source">NMPA</div>
+        <div class="policy-tag-date">3 Jul 2025</div>
+      </div>
+      <div>
+        <div class="policy-title">Fast-Track for AI Devices — Streamlined Special Review</div>
+        <div class="policy-desc">NMPA Announcement No. 63 streamlines the Special Review Procedure for innovative AI medical devices and <strong>simplifies approvals where core algorithm platforms remain equivalent.</strong> A meaningful reduction in regulatory friction for AI health products.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="window-box">
+    <div class="window-box-title">The Window Is Open — But Closing</div>
+    <div class="window-box-text">
+      Mental health AI sits outside NMPA device classification today — provided it is designed as a wellness tool. <strong>Regulators are prioritising adoption over restriction.</strong> Entering now captures the regulatory advantage before the next wave of tightening.
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 2 — PROBLEM                     -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Problem</div>
+  </div>
+
+  <div class="slide-title">173 Million Living with<br><span>Mental Health Conditions.</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="problem-stat-row">
+    <div class="problem-stat">
+      <div class="problem-stat-value">&lt;10%</div>
+      <div class="problem-stat-label">Ever seek specialist help<br><span>CMHS — depressive disorders treatment rate 9.5%</span></div>
+    </div>
+    <div class="problem-stat">
+      <div class="problem-stat-value">3.6%</div>
+      <div class="problem-stat-label">Reach specialist<br>psychiatric care<br><span>CMHS — specialty mental health sector</span></div>
+    </div>
+    <div class="problem-stat">
+      <div class="problem-stat-value">0.5%</div>
+      <div class="problem-stat-label">Receive full<br>adequate treatment<br><span>CMHS — full treatment rate</span></div>
+    </div>
+  </div>
+
+  <div class="problem-grid">
+
+    <div class="problem-block">
+      <div class="problem-block-number">01</div>
+      <div class="problem-block-content">
+        <div class="problem-block-title">A Structural Psychiatrist Shortage</div>
+        <div class="problem-block-desc">China has approximately <strong>4 psychiatrists per 100,000 people</strong> — roughly one-quarter to one-twelfth the per-capita ratios of Western nations. In Shanghai's premium private sector, the shortage is acute even for patients paying ¥1,500–2,400 per session. Jiahui's 4–5 psychiatrists serve 600,000 annual outpatients. Parkway covers 6 locations with 2–3 named specialists. Demand is real. Supply is structurally constrained.</div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <div class="problem-block-number">02</div>
+      <div class="problem-block-content">
+        <div class="problem-block-title">The Between-Session Void</div>
+        <div class="problem-block-desc">Psychiatrists see patients once every 2–4 weeks. <strong>Between sessions, patients have no clinical support.</strong> Gaps in structured support are documented as high-risk periods for clinical deterioration. No product at psychiatric grade — with human escalation built in — currently addresses this gap in the premium private patient segment.</div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <div class="problem-block-number">03</div>
+      <div class="problem-block-content">
+        <div class="problem-block-title">Digital Tools Without Clinical Governance</div>
+        <div class="problem-block-desc">Platforms like KnowYourself and Moodpath are digital mental health interventions focused on mood tracking and CBT exercises — without medical-grade clinical oversight. Tools without a human-in-the-loop model are documented to fail at accurately escalating during acute deterioration. <strong>Reach without a clinical safety net creates risk, not care.</strong></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="problem-gap-box">
+    <div class="problem-gap-label">The Specific Patient Niche We Address</div>
+    <div class="problem-gap-text">
+      Shanghai's premium private patients — MNC employees, HNW individuals, expatriates — are already paying private clinics ¥1,500–2,400 per session without AI intervention. With Promises Healthcare's expertise in delivering high-end psychiatric care, we are <strong>uniquely qualified to solve for this segment.</strong>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 3 — MARKET                      -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Market</div>
+  </div>
+
+  <div class="slide-title">A Defensible Niche<br><span>Inside a Large Market</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="market-intro" style="font-size:15px;font-weight:500;color:var(--navy);line-height:1.65;margin-bottom:20px;">
+    We are not chasing the full China mental health market. We are capturing a specific, winnable segment within Shanghai's premium private patient ecosystem — where structural referral partnerships exist and direct competition is minimal.
+  </div>
+
+  <div class="market-tiers">
+
+    <div class="market-tier">
+      <div class="market-tier-label">Total Market Size</div>
+      <div class="market-tier-name">Every mental health patient and provider in China</div>
+      <div class="market-tier-value">USD 3.05B</div>
+      <div class="market-tier-desc">Total China mental health market (2025, Statista). Growing under the State Council AI+ mandate and NHC investment cycle. We cite this for context — we are not trying to capture the whole market.</div>
+    </div>
+
+    <div class="market-tier">
+      <div class="market-tier-label">Our Reachable Market</div>
+      <div class="market-tier-name">Premium private patients in Shanghai we can realistically serve</div>
+      <div class="market-tier-value">SGD 19–25M</div>
+      <div class="market-tier-desc">Built bottom-up from verified patient flow data. 15,000–20,000 addressable patients across our Shanghai referral partners, multiplied by our blended annual subscription of ¥6,816 per patient.</div>
+    </div>
+
+    <div class="market-tier som">
+      <div class="market-tier-label">Year 1 Target — What We Will Capture</div>
+      <div class="market-tier-name">Realistic subscriber base by end of Year 1</div>
+      <div class="market-tier-value">SGD 7.76M</div>
+      <div class="market-tier-desc">10,800 active subscribers by end of Year 1. Subscription revenue ¥28.1M + first consult revenue ¥13.5M. Made possible by 9 months of pre-launch preparation.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 4 — SOLUTION                    -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Solution</div>
+  </div>
+
+  <div class="slide-title">A Scalable AI/Human Hybrid<br><span>Stepped Care Platform</span></div>
+  <div class="slide-divider"></div>
+
+  <!-- TOP: Stepped Care Grid -->
+  <div class="sol-section-label">Stepped Care Model</div>
+  <div class="sol-grid">
+
+    <div class="sol-tier sol-tier-1">
+      <div class="sol-tier-tag">Tier 1</div>
+      <div class="sol-tier-name">AI Therapy Agent</div>
+    </div>
+    <div class="sol-tier-desc">A structured clinical programme via WeChat. Each session follows a defined CBT module — Behavioural Activation, Thought Records, Cognitive Restructuring — in a warm, task-focused voice. Not open-ended conversation. PHQ-9 and GAD-7 collected at defined intervals. Deterioration flagged automatically to the clinical team.</div>
+
+    <div class="sol-tier sol-tier-2">
+      <div class="sol-tier-tag">Tier 2</div>
+      <div class="sol-tier-name">Consultant Psychiatrist</div>
+    </div>
+    <div class="sol-tier-desc">PRC-licensed psychiatrist. Reviews AI-generated clinical summaries and flagged cases. One 15-minute monthly tele-consultation. Manages medication and standard presentations.</div>
+
+    <div class="sol-tier sol-tier-3">
+      <div class="sol-tier-tag">Tier 3</div>
+      <div class="sol-tier-name">Senior Consultant Psychiatrist</div>
+    </div>
+    <div class="sol-tier-desc">PRC-licensed senior psychiatrist. One 60-minute monthly tele-consultation. Manages complex cases requiring senior clinical judgment.</div>
+
+  </div>
+
+  <div class="sol-guo-bar">
+    <span class="sol-guo-name">Dr Guo Song — Chief Scientific Officer (Singapore)</span>
+    <span class="sol-guo-desc">Designs and governs AI clinical protocols with local clinicians. Peer-to-peer consultation with local psychiatrists for complex cases. Corporate governance role — not patient-facing in China.</span>
+  </div>
+
+  <!-- BOTTOM: Tech Stack — Limbic-style full width -->
+  <div class="sol-section-label" style="margin-bottom:10px;">AI Layer Architecture</div>
+  <div class="sol-diamond-section">
+
+    <!-- LEFT LABELS aligned to each diamond -->
+    <div class="sol-diamond-labels">
+      <div class="sol-diamond-label-item">
+        <div class="sol-diamond-label-name" style="color:var(--teal);">Patient Interface</div>
+        <div class="sol-diamond-label-sub">WeChat Mini-Program<br>Mandarin-native · WeChat Pay</div>
+      </div>
+      <div class="sol-diamond-label-item">
+        <div class="sol-diamond-label-name" style="color:var(--navy);">The Promises Layer</div>
+        <div class="sol-diamond-label-sub">Clinical AI — custom logic<br>enforcing all clinical boundaries</div>
+      </div>
+      <div class="sol-diamond-label-item">
+        <div class="sol-diamond-label-name" style="color:#9A7A2A;">LLM Engine</div>
+        <div class="sol-diamond-label-sub">DeepSeek V3 · or Emohaa CBT-Bot<br>China onshore · under evaluation</div>
+      </div>
+    </div>
+
+    <!-- CENTRE DIAMONDS -->
+    <div class="sol-diamond-centre">
+      <svg viewBox="0 0 220 320" xmlns="http://www.w3.org/2000/svg" width="220" height="320">
+
+        <!-- TOP DIAMOND — teal — WeChat -->
+        <rect x="42" y="4" width="100" height="100" rx="18"
+              transform="rotate(45 92 54)"
+              fill="rgba(42,127,111,0.10)" stroke="#2A7F6F" stroke-width="1.5"/>
+        <rect x="56" y="4" width="74" height="74" rx="13"
+              transform="rotate(45 93 54)"
+              fill="none" stroke="#2A7F6F" stroke-width="0.75" stroke-dasharray="4 3" opacity="0.5"/>
+        <text x="93" y="48" text-anchor="middle" dominant-baseline="middle"
+              font-family="DM Sans,sans-serif" font-size="24" font-weight="800"
+              fill="#2A7F6F" opacity="0.85">W</text>
+        <text x="93" y="66" text-anchor="middle"
+              font-family="DM Sans,sans-serif" font-size="7.5" font-weight="600"
+              fill="#2A7F6F" opacity="0.7" letter-spacing="0.08em">WECHAT</text>
+
+        <!-- MIDDLE DIAMOND — navy — Promises Layer -->
+        <rect x="42" y="108" width="100" height="100" rx="18"
+              transform="rotate(45 92 158)"
+              fill="rgba(13,27,42,0.08)" stroke="#0D1B2A" stroke-width="1.5"/>
+        <rect x="56" y="108" width="74" height="74" rx="13"
+              transform="rotate(45 93 158)"
+              fill="none" stroke="#0D1B2A" stroke-width="0.75" stroke-dasharray="4 3" opacity="0.4"/>
+        <text x="93" y="150" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Josefin Sans',sans-serif" font-size="8.5" font-weight="400"
+              fill="#0D1B2A" letter-spacing="0.18em">PROMISES</text>
+        <text x="93" y="164" text-anchor="middle"
+              font-family="'Josefin Sans',sans-serif" font-size="7" font-weight="300"
+              fill="#0D1B2A" letter-spacing="0.14em" opacity="0.65">HEALTHCARE</text>
+
+        <!-- BOTTOM DIAMOND — gold — LLM Engine -->
+        <rect x="42" y="212" width="100" height="100" rx="18"
+              transform="rotate(45 92 262)"
+              fill="rgba(201,168,76,0.10)" stroke="#C9A84C" stroke-width="1.5"/>
+        <rect x="56" y="212" width="74" height="74" rx="13"
+              transform="rotate(45 93 262)"
+              fill="none" stroke="#C9A84C" stroke-width="0.75" stroke-dasharray="4 3" opacity="0.5"/>
+        <!-- DeepSeek icon -->
+        <image href="https://commons.wikimedia.org/wiki/Special:FilePath/Deepseek-logo-icon.svg"
+               x="70" y="238" width="44" height="44" opacity="0.85"/>
+        <text x="93" y="286" text-anchor="middle"
+              font-family="'Josefin Sans',sans-serif" font-size="7" font-weight="300"
+              fill="#9A7A2A" letter-spacing="0.1em" opacity="0.8">/ EMOHAA CBT-BOT</text>
+
+      </svg>
+    </div>
+
+    <!-- RIGHT EXPLANATION -->
+    <div class="sol-diamond-right">
+      <div class="sol-promises-box">
+        <div class="sol-promises-box-title">The Promises Layer</div>
+        <div class="sol-promises-box-text">Our clinical AI sits between the patient and the LLM. It structures every session around a defined CBT module — the LLM cannot deviate into open-ended emotional conversation. It enforces all clinical boundaries before any response reaches the patient.</div>
+        <div class="sol-promises-box-list">
+          <div class="sol-promises-box-item">PHQ-9 / GAD-7 scoring engine</div>
+          <div class="sol-promises-box-item">Crisis detection · human escalation triggers</div>
+          <div class="sol-promises-box-item">Session memory via Milvus vector database</div>
+          <div class="sol-promises-box-item">2-hour usage reminder · CAC content labeling</div>
+          <div class="sol-promises-box-item">PIPL-compliant · Tencent Cloud · China onshore</div>
+        </div>
+      </div>
+      <div class="sol-compliance-tags">
+        <div class="sol-compliance-tag">PIPL Compliant</div>
+        <div class="sol-compliance-tag">Tencent Cloud</div>
+        <div class="sol-compliance-tag">CAC Registered</div>
+        <div class="sol-compliance-tag">China Onshore</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 5 — WHY WE WILL WIN             -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Why We Will Win</div>
+  </div>
+
+  <div class="slide-title">One Moat.<br><span>Thirty Years in the Making.</span></div>
+  <div class="slide-divider"></div>
+
+  <!-- 2x2 Chart -->
+  <div style="position:relative; margin-bottom:36px; padding-left:20px;">
+
+    <div class="win-axis-y" style="left:-60px;">Clinical Governance Model</div>
+
+    <div class="win-2x2-wrap">
+
+      <!-- TL: High governance, low clinical IP -->
+      <div class="win-q win-q-tl">
+        <div class="win-q-label">High governance · generic content</div>
+      </div>
+
+      <!-- TR: High governance, high clinical IP — our quadrant -->
+      <div class="win-q win-q-tr">
+        <div class="win-q-label">Proprietary IP · owned institution</div>
+      </div>
+
+      <!-- BL: Low governance, low clinical IP -->
+      <div class="win-q win-q-bl">
+        <div class="win-q-label">Tech platform · no governance</div>
+      </div>
+
+      <!-- BR: Low governance, high clinical IP -->
+      <div class="win-q win-q-br">
+        <div class="win-q-label">Scale platform · outsourced governance</div>
+      </div>
+
+      <!-- BOTTOM-LEFT cluster -->
+      <div class="win-dot" style="left:12%;top:78%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">KnowYourself</div>
+      </div>
+      <div class="win-dot" style="left:20%;top:88%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">Moodpath CN</div>
+      </div>
+      <div class="win-dot" style="left:8%;top:65%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">Baidu Health</div>
+      </div>
+      <div class="win-dot" style="left:28%;top:80%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">Xiaoice</div>
+      </div>
+      <div class="win-dot" style="left:18%;top:70%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">好心情 Good Mood</div>
+      </div>
+      <div class="win-dot" style="left:32%;top:68%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">MyTherapist</div>
+      </div>
+
+      <!-- BOTTOM-RIGHT -->
+      <div class="win-dot" style="left:62%;top:72%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">Ping An Good Doctor</div>
+      </div>
+      <div class="win-dot" style="left:78%;top:84%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">JD Health</div>
+      </div>
+
+      <!-- TOP-RIGHT — competitors below Promises AI -->
+      <div class="win-dot" style="left:58%;top:42%;">
+        <div class="win-dot-circle" style="background:rgba(13,27,42,0.4);"></div>
+        <div class="win-dot-label">SMHC Smart CBT-I</div>
+      </div>
+      <div class="win-dot" style="left:76%;top:48%;">
+        <div class="win-dot-circle" style="background:rgba(13,27,42,0.4);"></div>
+        <div class="win-dot-label">Renji AIDA</div>
+      </div>
+      <div class="win-dot" style="left:82%;top:32%;">
+        <div class="win-dot-circle" style="background:rgba(201,168,76,0.8);"></div>
+        <div class="win-dot-label">Mindfront</div>
+      </div>
+
+      <!-- PROMISES AI — top right, alone -->
+      <div class="win-dot win-dot-promises" style="left:72%;top:12%;">
+        <div class="win-dot-circle"></div>
+        <div class="win-dot-label">Promises AI</div>
+      </div>
+
+    </div>
+
+    <!-- X axis label -->
+    <div style="text-align:center;margin-top:8px;font-family:var(--sans);font-size:10px;font-weight:500;color:rgba(13,27,42,0.45);letter-spacing:0.06em;">
+      ← Wellness App &nbsp;&nbsp;&nbsp; Clinical Sophistication &nbsp;&nbsp;&nbsp; Proprietary Psychiatric IP →
+    </div>
+
+  </div>
+
+  <!-- Moat statement -->
+  <div class="win-moat-statement">
+    30+ years of proprietary psychiatric IP with TCM-integrated care — owned, not licensed, not replicable.
+  </div>
+
+  <!-- Three moat points -->
+  <div class="win-moat-points" style="margin-top:16px;">
+
+    <div class="win-moat-point">
+      <div class="win-moat-point-title">Clinical IP that cannot be acquired</div>
+      <div class="win-moat-point-desc">Competitors can hire engineers and deploy capital. None can manufacture 30 years of validated clinical protocols. Every patient interaction is governed by a documented framework built in active psychiatric practice.</div>
+    </div>
+
+    <div class="win-moat-point">
+      <div class="win-moat-point-title">Governance owned, not outsourced</div>
+      <div class="win-moat-point-desc">Our Shanghai psychiatrists operate under Promises' clinical protocols — not generic AI-generated content. A PRC-licensed senior psychiatrist is Doctor of Record. The clinical governance structure is ours.</div>
+    </div>
+
+    <div class="win-moat-point">
+      <div class="win-moat-point-title">TCM integration — authentic, not cosmetic</div>
+      <div class="win-moat-point-desc">No Western-origin competitor integrates TCM into a digital psychiatric framework. Dr Guo Song's 40-year dual-jurisdiction practice makes this clinically credible — not a marketing claim.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 6 — BUSINESS MODEL              -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Business Model</div>
+  </div>
+
+  <div class="slide-title">Software-Grade Margin<br><span>on a Clinical Service</span></div>
+  <div class="slide-divider"></div>
+
+  <!-- 3-Plans Pricing Table -->
+  <div class="bm-section-label">3-Plans Pricing — Annual Subscription, per Patient per Month</div>
+  <div class="bm-plans">
+
+    <div class="bm-plan bm-plan-1">
+      <div class="bm-plan-tag">Plan 1</div>
+      <div class="bm-plan-name">Digital</div>
+      <div class="bm-plan-price">¥188<span style="font-size:16px;font-family:var(--sans);font-weight:300;">/mo</span></div>
+      <div class="bm-plan-price-sub">~SGD 35/month</div>
+      <div class="bm-plan-rule"></div>
+      <div class="bm-plan-includes">AI therapy programme only. 24/7 WeChat access. PHQ-9/GAD-7 tracking. CBT modules in Mandarin.</div>
+      <div class="bm-plan-mix">50% of patients</div>
+    </div>
+
+    <div class="bm-plan bm-plan-2">
+      <div class="bm-plan-tag">Plan 2 — Flagship</div>
+      <div class="bm-plan-name">Hybrid</div>
+      <div class="bm-plan-price">¥888<span style="font-size:16px;font-family:var(--sans);font-weight:300;">/mo</span></div>
+      <div class="bm-plan-price-sub">~SGD 165/month</div>
+      <div class="bm-plan-rule"></div>
+      <div class="bm-plan-includes">Everything in Plan 1, plus one 15-minute monthly tele-consultation with a PRC-licensed consultant psychiatrist.</div>
+      <div class="bm-plan-mix">40% of patients</div>
+    </div>
+
+    <div class="bm-plan bm-plan-3">
+      <div class="bm-plan-tag">Plan 3</div>
+      <div class="bm-plan-name">Concierge</div>
+      <div class="bm-plan-price">¥1,188<span style="font-size:16px;font-family:var(--sans);font-weight:300;">/mo</span></div>
+      <div class="bm-plan-price-sub">~SGD 221/month</div>
+      <div class="bm-plan-rule"></div>
+      <div class="bm-plan-includes">Everything in Plan 1, plus one 15-minute monthly tele-consultation with a PRC-licensed senior consultant psychiatrist.</div>
+      <div class="bm-plan-mix">10% of patients</div>
+    </div>
+
+  </div>
+
+  <!-- ARPU Row -->
+  <div class="bm-arpu-row">
+    <div class="bm-arpu-box">
+      <div class="bm-arpu-label">Blended Monthly ARPU — Subscription</div>
+      <div class="bm-arpu-value">¥568<span style="font-size:16px;font-family:var(--sans);font-weight:300;">/month</span></div>
+      <div class="bm-arpu-sub">Weighted average across 50/40/10 plan mix</div>
+    </div>
+    <div class="bm-arpu-box">
+      <div class="bm-arpu-label">First Consult Fee — Plans 2 &amp; 3 Patients</div>
+      <div class="bm-arpu-value">¥2,500<span style="font-size:16px;font-family:var(--sans);font-weight:300;"> once</span></div>
+      <div class="bm-arpu-sub">Mandatory in-person initial consultation · collected at onboarding · 50% of all patients</div>
+    </div>
+  </div>
+
+  <!-- Two revenue streams note -->
+  <div style="background:rgba(42,127,111,0.06);border-left:3px solid var(--teal);border-radius:3px;padding:10px 14px;margin-bottom:16px;">
+    <div style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;">Two Revenue Streams</div>
+    <div style="font-family:var(--sans);font-size:12px;font-weight:400;color:#1E2D3D;line-height:1.65;">
+      <strong style="color:var(--navy);">Stream 1 — Subscription:</strong> ¥568/month blended ARPU across 10,800 patients = ¥28.1M Year 1.<br>
+      <strong style="color:var(--navy);">Stream 2 — First Consult:</strong> ¥2,500 × 5,400 Plans 2&amp;3 patients = ¥13.5M Year 1.<br>
+      <strong style="color:var(--navy);">Combined Year 1: ¥41.6M (~SGD 7.76M).</strong> Prescriptions issued digitally — no dispensary needed. Pharmacy referral to JD Health or Ali Health.
+    </div>
+  </div>
+
+  <!-- Unit Economics + FTE Note -->
+  <div class="bm-section-label">Unit Economics</div>
+  <div class="bm-unit-grid">
+
+    <div class="bm-cogs-box">
+      <div class="bm-cogs-title">COGS — Software Infrastructure Only</div>
+      <div class="bm-cogs-item">
+        <span class="bm-cogs-name">LLM API (DeepSeek / Emohaa)</span>
+        <span class="bm-cogs-val">¥1.50</span>
+      </div>
+      <div class="bm-cogs-item">
+        <span class="bm-cogs-name">Tencent Cloud + Milvus hosting</span>
+        <span class="bm-cogs-val">¥1.50</span>
+      </div>
+      <div class="bm-cogs-item">
+        <span class="bm-cogs-name">WeChat Pay processing (0.6%)</span>
+        <span class="bm-cogs-val">¥3.41</span>
+      </div>
+      <div class="bm-cogs-total">
+        <span class="bm-cogs-total-name">Total COGS / patient / month</span>
+        <span class="bm-cogs-total-val">¥6.41</span>
+      </div>
+    </div>
+
+    <div class="bm-fte-note">
+      <div class="bm-fte-note-title">Why Doctors Are Not in COGS</div>
+      <div class="bm-fte-note-text">All 9 clinical FTEs — in-clinic and tele-consult teams — are salaried employees. Their salaries sit below the gross margin line as operating expenses. China-based FTEs carry a 35% social security surcharge (五险一金). Singapore-based tele-consult psychiatrists do not — a structural cost advantage. No dispensary costs — prescriptions issued digitally, filled via pharmacy partners.</div>
+    </div>
+
+  </div>
+
+  <!-- GM Callout -->
+  <div class="bm-gm-callout">
+    <div class="bm-gm-number">~97%</div>
+    <div class="bm-gm-text">
+      <div class="bm-gm-label">Blended Gross Margin — Subscription + First Consult</div>
+      <div class="bm-gm-sub">¥6.41 software COGS against ¥568 blended subscription ARPU = ~99% on subscription. First consult COGS minimal (¥50 materials/visit). Blended across both revenue streams: ~97%. Clinical delivery is salaried, structured, and scalable — all doctor costs sit below this line.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 7 — SALES FORECAST              -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Sales Forecast</div>
+  </div>
+
+  <div class="slide-title">Year 1 Revenue Forecast<br><span>GP Clinic-First Ramp</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="sf-intro">
+    <strong>9 months of pre-launch preparation before official launch.</strong> All referral partnerships signed before Day 1. Every patient in the ramp below comes through a signed clinical partner — zero cold acquisition cost.
+  </div>
+
+  <!-- Quarterly Table -->
+  <table class="sf-table">
+    <thead>
+      <tr>
+        <th>Quarter</th>
+        <th>New subs/month</th>
+        <th>Cumulative active</th>
+        <th>Subscription revenue</th>
+        <th>First consult revenue</th>
+        <th>Total revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sf-q">Q1</td>
+        <td>400</td>
+        <td>1,200</td>
+        <td class="sf-rev">¥1,022,400</td>
+        <td class="sf-rev">¥1,500,000</td>
+        <td class="sf-rev" style="color:var(--teal);">¥2,522,400</td>
+      </tr>
+      <tr>
+        <td class="sf-q">Q2</td>
+        <td>700</td>
+        <td>3,300</td>
+        <td class="sf-rev">¥3,834,000</td>
+        <td class="sf-rev">¥2,625,000</td>
+        <td class="sf-rev" style="color:var(--teal);">¥6,459,000</td>
+      </tr>
+      <tr>
+        <td class="sf-q">Q3</td>
+        <td>1,100</td>
+        <td>6,600</td>
+        <td class="sf-rev">¥8,434,800</td>
+        <td class="sf-rev">¥4,125,000</td>
+        <td class="sf-rev" style="color:var(--teal);">¥12,559,800</td>
+      </tr>
+      <tr>
+        <td class="sf-q">Q4</td>
+        <td>1,400</td>
+        <td>10,800</td>
+        <td class="sf-rev">¥14,824,800</td>
+        <td class="sf-rev">¥5,250,000</td>
+        <td class="sf-rev" style="color:var(--teal);">¥20,074,800</td>
+      </tr>
+      <tr class="sf-total">
+        <td colspan="3">Year 1 Total</td>
+        <td class="sf-rev">¥28,116,000</td>
+        <td class="sf-rev">¥13,500,000</td>
+        <td class="sf-rev">¥41,616,000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Bottom: stats + bar chart -->
+  <div class="sf-bottom">
+
+    <div class="sf-stats">
+      <div class="sf-stat">
+        <div class="sf-stat-label">Year 1 Total Revenue</div>
+        <div class="sf-stat-value sf-highlight">¥41.62M</div>
+        <div class="sf-stat-sub">~SGD 7.76M · Subscription ¥28.1M + First Consult ¥13.5M</div>
+      </div>
+      <div class="sf-stat">
+        <div class="sf-stat-label">Active Subscribers — End of Year 1</div>
+        <div class="sf-stat-value">10,800</div>
+        <div class="sf-stat-sub">Annual subscriptions — all paying through Year 2</div>
+      </div>
+      <div class="sf-stat">
+        <div class="sf-stat-label">Blended ARPU</div>
+        <div class="sf-stat-value">¥568<span style="font-size:16px;font-family:var(--sans);font-weight:300;">/mo</span></div>
+        <div class="sf-stat-sub">50% Plan 1 · 40% Plan 2 · 10% Plan 3</div>
+      </div>
+    </div>
+
+    <div class="sf-bar-section">
+      <div class="sf-bar-chart">
+        <!-- Q1: ¥2.52M — 12.6% of max ¥20.07M -->
+        <div class="sf-bar-col">
+          <div class="sf-bar-val">¥2.52M</div>
+          <div class="sf-bar" style="height:13%;"></div>
+          <div class="sf-bar-qlabel">Q1</div>
+        </div>
+        <!-- Q2: ¥6.46M — 32.2% -->
+        <div class="sf-bar-col">
+          <div class="sf-bar-val">¥6.46M</div>
+          <div class="sf-bar" style="height:32%;"></div>
+          <div class="sf-bar-qlabel">Q2</div>
+        </div>
+        <!-- Q3: ¥12.56M — 62.6% -->
+        <div class="sf-bar-col">
+          <div class="sf-bar-val">¥12.56M</div>
+          <div class="sf-bar" style="height:63%;"></div>
+          <div class="sf-bar-qlabel">Q3</div>
+        </div>
+        <!-- Q4: ¥20.07M — 100% -->
+        <div class="sf-bar-col">
+          <div class="sf-bar-val">¥20.07M</div>
+          <div class="sf-bar" style="height:100%;"></div>
+          <div class="sf-bar-qlabel">Q4</div>
+        </div>
+      </div>
+      <div class="sf-bar-baseline"></div>
+
+      <div class="sf-note">
+        <strong>Why revenue compounds:</strong> Annual subscriptions compound — Q1 patients still paying in Q4. Each new quarter adds subscribers on top. First consult revenue (¥2,500 per Plans 2&3 patient) is collected at onboarding — front-loaded and non-recurring. Combined Year 1: ¥41.6M (~SGD 7.76M).
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 8 — GTM                         -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Go-To-Market</div>
+  </div>
+
+  <div class="slide-title">Partnership-Led.<br><span>Zero Cold Acquisition.</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="gtm-body">
+
+    <!-- LEFT: Partners -->
+    <div>
+      <div class="gtm-col-title">Phase 1 Shanghai Referral Partners</div>
+      <div class="gtm-partners">
+
+        <div class="gtm-partner">
+          <div class="gtm-partner-type">GP Clinic Network · Priority 1</div>
+          <div class="gtm-partner-name">Raffles Hospital Shanghai</div>
+          <div class="gtm-partner-why">Singapore origin — warm introduction at the Promises Healthcare level before we land in Shanghai. Small MH team relative to patient volume. Natural fit.</div>
+          <div class="gtm-partner-locs">1 hospital, Pudong</div>
+        </div>
+
+        <div class="gtm-partner">
+          <div class="gtm-partner-type">GP Clinic Network · Priority 2</div>
+          <div class="gtm-partner-name">Global Healthcare (GHC)</div>
+          <div class="gtm-partner-why">Foreign-owned, moves fast. GPs see MH presentations daily with no internal psychiatrist to refer to. Pure additive referral — no cannibalisation.</div>
+          <div class="gtm-partner-locs">2 locations — Jing'an + Pudong</div>
+        </div>
+
+        <div class="gtm-partner">
+          <div class="gtm-partner-type">GP Clinic Network · Priority 3</div>
+          <div class="gtm-partner-name">UP Clinic</div>
+          <div class="gtm-partner-why">Mental wellness focus, no in-house psychiatrist. Boutique, fast decision-making. Referral agreement closeable in weeks.</div>
+          <div class="gtm-partner-locs">3 locations — Gubei, Qiantan, Xintiandi</div>
+        </div>
+
+        <div class="gtm-partner">
+          <div class="gtm-partner-type">GP Clinic Network · Priority 4</div>
+          <div class="gtm-partner-name">American-Sino Women's & Children's</div>
+          <div class="gtm-partner-why">Perinatal and paediatric focus. Postnatal depression and perinatal anxiety are high-referral, underserved by existing tools.</div>
+          <div class="gtm-partner-locs">1 hospital, Xuhui</div>
+        </div>
+
+        <div class="gtm-partner overflow">
+          <div class="gtm-partner-type">Overflow Partnership · Year 1</div>
+          <div class="gtm-partner-name">Parkway Health</div>
+          <div class="gtm-partner-why">Has psychiatrists — but generates overflow demand. Dr Eben Shi is an internal champion for tech-augmented care. We absorb step-down and waitlist cases.</div>
+          <div class="gtm-partner-locs">6 locations across Shanghai</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Referral pathway + zero CAC -->
+    <div>
+      <div class="gtm-col-title">Referral Pathway</div>
+      <div class="gtm-pathway">
+
+        <div class="gtm-pathway-step">
+          <div class="gtm-step-num">1</div>
+          <div class="gtm-step-content">
+            <div class="gtm-step-title">GP or clinic identifies patient</div>
+            <div class="gtm-step-desc">GP sees a patient presenting with stress, anxiety, sleep issues, or low mood. No in-house psychiatrist available to refer to internally.</div>
+          </div>
+        </div>
+
+        <div class="gtm-pathway-step">
+          <div class="gtm-step-num">2</div>
+          <div class="gtm-step-content">
+            <div class="gtm-step-title">WeChat QR code — patient self-books</div>
+            <div class="gtm-step-desc">GP hands patient a printed or on-screen WeChat QR code. Patient scans, books directly. Zero friction — no app download, no phone call.</div>
+          </div>
+        </div>
+
+        <div class="gtm-pathway-step">
+          <div class="gtm-step-num">3</div>
+          <div class="gtm-step-content">
+            <div class="gtm-step-title">AI intake — PHQ-9, GAD-7, structured history</div>
+            <div class="gtm-step-desc">Patient completes a 10-minute structured intake via the WeChat mini-program. Clinical summary generated automatically.</div>
+          </div>
+        </div>
+
+        <div class="gtm-pathway-step">
+          <div class="gtm-step-num">4</div>
+          <div class="gtm-step-content">
+            <div class="gtm-step-title">AI therapy programme begins</div>
+            <div class="gtm-step-desc">Patient enters the appropriate plan based on clinical presentation. Annual subscription starts. Revenue recognised from Day 1.</div>
+          </div>
+        </div>
+
+        <div class="gtm-pathway-step">
+          <div class="gtm-step-num">5</div>
+          <div class="gtm-step-content">
+            <div class="gtm-step-title">Human escalation where clinically indicated</div>
+            <div class="gtm-step-desc">Plan 2 and Plan 3 patients receive monthly psychiatrist tele-consultations. AI flags deterioration for immediate human review.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="gtm-zero-cac">
+        <div class="gtm-zero-cac-title">Why This GTM Works</div>
+        <div class="gtm-zero-cac-text"><strong>Zero patient acquisition cost.</strong> Every patient enters through a signed clinical partner. No digital advertising, no app store spend, no consumer marketing. A GP handing a patient a QR code converts at a fundamentally different rate than an ad. Clinical trust transfers at point of referral.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 8 — GTM PAGE 2                  -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Go-To-Market</div>
+  </div>
+
+  <div class="slide-title">9-Month Pre-Launch<br><span>Preparation Plan</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="gtm-section-label">Pre-Launch — 9 Months Before Official Launch</div>
+  <div class="gtm-prelaunch" style="max-width:600px;">
+    <div class="gtm-prelaunch-title">Entity formation, licensing, hiring, fundraising, tech build. No patients. No revenue.</div>
+    <div class="gtm-prelaunch-item">Months 1–3: Singapore SPV + Shanghai WFOE incorporated. Fundraising. CMO search begins. Engineer engaged — tech build starts.</div>
+    <div class="gtm-prelaunch-item">Months 4–6: CMO onboarded. Internet Hospital Licence application filed. Clinical governance protocols drafted. BD partner outreach begins. CAC algorithm registration filed.</div>
+    <div class="gtm-prelaunch-item">Months 7–9: Referral partnership agreements signed. WeChat mini-program QA and testing. Internet Hospital Licence granted. Dr Guo Song foreign physician permit processed. Referral SOPs finalised with all partners.</div>
+    <div class="gtm-prelaunch-item">Month 10: Official launch — full referral network active. First patients onboarded.</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 9 — EXPANSION PLAN              -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Expansion Plan</div>
+  </div>
+
+  <div class="slide-title">Gate-Driven, Not<br><span>Calendar-Driven.</span></div>
+  <div class="slide-divider"></div>
+
+  <!-- Four phases -->
+  <div class="exp-phases">
+
+    <div class="exp-phase exp-phase-1">
+      <div class="exp-phase-header">
+        <div class="exp-phase-num">1</div>
+        <div class="exp-phase-info">
+          <div class="exp-phase-city">Shanghai</div>
+          <div class="exp-phase-years">Y1–3</div>
+        </div>
+        <div class="exp-phase-tag">Beachhead</div>
+      </div>
+      <div class="exp-phase-desc">GP clinic networks + Parkway overflow. Prove the model. Build outcomes data. 1,000+ MNC regional HQs. Dr Guo Song's profile maximally relevant. Lingang FTZ foreign entity structure.</div>
+      <div class="exp-phase-reg">Lingang FTZ 15% CIT · Shanghai Medical AI Plan 2025–27 · Lingang cross-border biomedical data pathway</div>
+    </div>
+
+    <div class="exp-phase exp-phase-2">
+      <div class="exp-phase-header">
+        <div class="exp-phase-num">2</div>
+        <div class="exp-phase-info">
+          <div class="exp-phase-city">Shenzhen</div>
+          <div class="exp-phase-years">Y3–5</div>
+        </div>
+        <div class="exp-phase-tag">Scale</div>
+      </div>
+      <div class="exp-phase-desc">Tech hub. Highest density of young MNC professionals in China — Tencent, Huawei, DJI. Distinct Healthcare has 9 clinic locations. Jiahui outpatient presence. Same playbook, faster activation.</div>
+      <div class="exp-phase-reg">Qianhai FTZ 15% IIT cap for talent (to Dec 2027) · Singapore health groups already signing hospital entry agreements</div>
+    </div>
+
+    <div class="exp-phase exp-phase-3">
+      <div class="exp-phase-header">
+        <div class="exp-phase-num">3</div>
+        <div class="exp-phase-info">
+          <div class="exp-phase-city">Guangzhou</div>
+          <div class="exp-phase-years">Y5–7</div>
+        </div>
+        <div class="exp-phase-tag">Expand</div>
+      </div>
+      <div class="exp-phase-desc">Same Guangdong operational entity as Shenzhen — one SPV, two cities. United Family present. Large HNW local Chinese patient base. Marginal expansion cost is BD only, not legal or tech.</div>
+      <div class="exp-phase-reg">Shared Guangdong entity — no new entity formation cost · Pearl River Delta economic zone incentives</div>
+    </div>
+
+    <div class="exp-phase exp-phase-4">
+      <div class="exp-phase-header">
+        <div class="exp-phase-num">4</div>
+        <div class="exp-phase-info">
+          <div class="exp-phase-city">Beijing</div>
+          <div class="exp-phase-years">Y7–9</div>
+        </div>
+        <div class="exp-phase-tag">Establish</div>
+      </div>
+      <div class="exp-phase-desc">Enter with 6+ years of outcomes data and brand credibility across three cities. Political capital rewards established players. Domestic HNW and government-adjacent patient profile broadens the addressable market.</div>
+      <div class="exp-phase-reg">Beijing AI+ Healthcare Action Plan 2025–27 · Fast-track review for innovative AI medical devices by 2027</div>
+    </div>
+
+  </div>
+
+  <!-- Gate conditions -->
+  <div class="exp-gates-section">
+    <div class="exp-gates-label">Gate Conditions — All Four Must Be Met Before Next City Unlocks</div>
+    <div class="exp-gates">
+
+      <div class="exp-gate">
+        <div class="exp-gate-metric">≥1,000 active subscriptions/month</div>
+        <div class="exp-gate-sub">Sustained 3 consecutive months</div>
+        <div class="exp-gate-why">Unit economics proven at scale</div>
+      </div>
+
+      <div class="exp-gate">
+        <div class="exp-gate-metric">≥3 referral partnerships</div>
+        <div class="exp-gate-sub">No single source &gt;40% of intake</div>
+        <div class="exp-gate-why">Distribution is diversified and replicable</div>
+      </div>
+
+      <div class="exp-gate">
+        <div class="exp-gate-metric">PHQ-9 mean reduction ≥5 pts</div>
+        <div class="exp-gate-sub">Across ≥200 completed episodes</div>
+        <div class="exp-gate-why">Clinical credibility transfers to next city</div>
+      </div>
+
+      <div class="exp-gate">
+        <div class="exp-gate-metric">2nd psychiatrist onboarded</div>
+        <div class="exp-gate-sub">With documented clinical protocols</div>
+        <div class="exp-gate-why">Model scales beyond one person</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Revenue trajectory -->
+  <div class="exp-revenue">
+    <div class="exp-rev-item">
+      <div class="exp-rev-phase">End Y3</div>
+      <div class="exp-rev-text">¥24.2M+ ARR — Shanghai alone at steady state</div>
+    </div>
+    <div class="exp-rev-divider"></div>
+    <div class="exp-rev-item">
+      <div class="exp-rev-phase">End Y5</div>
+      <div class="exp-rev-text">Shenzhen adds second revenue stream — Guangdong FTZ improves margin</div>
+    </div>
+    <div class="exp-rev-divider"></div>
+    <div class="exp-rev-item">
+      <div class="exp-rev-phase">End Y7</div>
+      <div class="exp-rev-text">Three-city — Guangdong entity serves two cities from one OpEx base</div>
+    </div>
+    <div class="exp-rev-divider"></div>
+    <div class="exp-rev-item">
+      <div class="exp-rev-phase">End Y9</div>
+      <div class="exp-rev-text">Four-city pan-China platform — 7+ years of proprietary outcomes data becomes a moat</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 10 — TEAM                       -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Team</div>
+  </div>
+
+  <div class="slide-title">A Team Built<br><span>For This Venture</span></div>
+  <div class="slide-divider"></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+    <!-- Card 1: Dr Guo Song -->
+    <div class="team-member">
+      <div class="team-member-role">Medical Director</div>
+      <div class="team-member-name">Dr Guo Song</div>
+      <div class="team-member-desc">40+ years of psychiatric practice across Beijing and Singapore. Bilingual Mandarin/English. Specialisations: adult psychiatry, addiction medicine, depression, anxiety, sleep disorders. Integrates TCM as a complementary clinical tool. His dual-jurisdiction expertise is the clinical backbone of Promises AI — no competitor can replicate this combination.</div>
+      <div class="team-member-focus">Designs and governs AI clinical protocols. Peer-to-peer consultation with local psychiatrists for complex cases. Materially increases clinical credibility with Shanghai hospital partners.</div>
+    </div>
+
+    <!-- Card 2: Keith Wang -->
+    <div class="team-member">
+      <div class="team-member-role">General Manager</div>
+      <div class="team-member-name">Keith Wang</div>
+      <div class="team-member-desc">Head of HNW Business Division, Promises Healthcare. Ex-startup founder with AI and mental health strategy experience across Asia. Built the entire China AI venture strategy, clinical model, regulatory framework, GTM, and investor materials from the ground up.</div>
+      <div class="team-member-focus">Full P&L ownership. Investor and hospital partner relationships. Product vision and roadmap. Singapore–China governance coordination. Hands off to local China GM as venture scales.</div>
+    </div>
+
+    <!-- Card 3: AI Engineering Lead -->
+    <div class="team-member tbc">
+      <div class="team-member-role">AI Engineering Lead — TBC</div>
+      <div class="team-member-name">Fullstack Engineer</div>
+      <div class="team-member-desc">Fullstack developer with WeChat mini-program experience. Known candidate identified, pending formal engagement. Builds and owns the full tech stack: WeChat mini-program, LLM integration, Milvus memory layer, clinician dashboard, PHQ-9/GAD-7 tracking, crisis flag protocol, CAC compliance, and WeChat Pay integration.</div>
+      <div class="team-member-focus">End-to-end product ownership. Single technical point of accountability for Year 1. Accelerates time-to-launch with existing WeChat ecosystem experience.</div>
+      <div class="team-status">⚑ Known candidate — pending formal engagement</div>
+    </div>
+
+    <!-- Card 4: Operations Lead -->
+    <div class="team-member tbc">
+      <div class="team-member-role">Operations Lead — TBC</div>
+      <div class="team-member-name">China Operations</div>
+      <div class="team-member-desc">Handles all non-clinical China operations: legal and regulatory affairs (WFOE compliance, internet hospital licence, CAC filings), clinic administration and management, HR and payroll for Shanghai FTEs, government relations, and day-to-day operational governance of the Shanghai entity.</div>
+      <div class="team-member-focus">Frees Keith Wang and Dr Guo Song to focus on clinical and investor-facing work. Critical for navigating China's operational and regulatory environment without a misstep.</div>
+      <div class="team-status">⚑ Search active — priority hire for pre-launch period</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 11 — FUNDING NEEDS              -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Funding Needs</div>
+  </div>
+
+  <div class="slide-title">SGD 4.5M Pre-Series A<br><span>36-Month Runway</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="fn-body">
+
+    <!-- LEFT: Use of Funds -->
+    <div class="fn-left">
+      <div>
+        <div class="fn-section-label">Use of Funds — 36 Months</div>
+
+        <div class="fn-cat">People</div>
+        <div class="fn-table-row"><span class="fn-item-name">Keith Wang — GM (36 × SGD 20K)</span><span class="fn-item-val">720,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Senior Consultant Psychiatrist — TCTC incl. 35% CPF (36 × SGD 24.3K)</span><span class="fn-item-val">874,800</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Consultant Psychiatrist — TCTC incl. 35% CPF (36 × SGD 13.5K)</span><span class="fn-item-val">486,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Tele-Consult Psychiatrists Singapore (36 × SGD 15K avg)</span><span class="fn-item-val">540,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">AI Engineer (36 × SGD 4K)</span><span class="fn-item-val">144,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Dr Guo Song advisory (36 × SGD 2.5K)</span><span class="fn-item-val">90,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">CME allowances + recruitment (one-time SGD 36K + SGD 18K/yr)</span><span class="fn-item-val">90,000</span></div>
+        <div class="fn-table-row fn-subtotal"><span class="fn-item-name">People subtotal</span><span class="fn-item-val">2,944,800</span></div>
+
+        <div class="fn-cat">Legal &amp; Compliance</div>
+        <div class="fn-table-row"><span class="fn-item-name">WFOE/SPV formation + registered capital</span><span class="fn-item-val">33,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">PIPL + clinical structure + AI compliance opinions</span><span class="fn-item-val">28,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">AllBright retainer (36 × SGD 5K)</span><span class="fn-item-val">180,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Accounting + PI insurance + licences</span><span class="fn-item-val">130,800</span></div>
+        <div class="fn-table-row fn-subtotal"><span class="fn-item-name">Legal &amp; compliance subtotal</span><span class="fn-item-val">371,800</span></div>
+
+        <div class="fn-cat">Technology</div>
+        <div class="fn-table-row"><span class="fn-item-name">Tencent Cloud + LLM API + WeChat (36 months)</span><span class="fn-item-val">36,300</span></div>
+
+        <div class="fn-cat">Clinical Space &amp; Fitout</div>
+        <div class="fn-table-row"><span class="fn-item-name">Clinic rental — 120 sqm Changning (36 × SGD 5.3K)</span><span class="fn-item-val">190,800</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Medical fitout — 5 consulting rooms (one-time)</span><span class="fn-item-val">55,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Medical equipment + consumables</span><span class="fn-item-val">21,600</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">Security deposit (3 months)</span><span class="fn-item-val">15,900</span></div>
+        <div class="fn-table-row fn-subtotal"><span class="fn-item-name">Clinical space subtotal</span><span class="fn-item-val">283,300</span></div>
+
+        <div class="fn-cat">BD &amp; Clinical Partnerships</div>
+        <div class="fn-table-row"><span class="fn-item-name">Advisory fees — GP/hospital KOL (36 × SGD 5K)</span><span class="fn-item-val">180,000</span></div>
+        <div class="fn-table-row"><span class="fn-item-name">BD materials + travel (36 × SGD 2.5K)</span><span class="fn-item-val">90,000</span></div>
+        <div class="fn-table-row fn-subtotal"><span class="fn-item-name">BD subtotal</span><span class="fn-item-val">270,000</span></div>
+
+        <div class="fn-cat">Contingency (15%)</div>
+        <div class="fn-table-row"><span class="fn-item-name">Buffer on all above</span><span class="fn-item-val">585,930</span></div>
+
+        <div class="fn-table-row fn-total">
+          <span class="fn-item-name">Total Raise</span>
+          <span class="fn-item-val">SGD 4,500,000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Cap Table + Returns + Messages -->
+    <div class="fn-right">
+
+      <!-- Cap table -->
+      <div>
+        <div class="fn-section-label">Cap Table</div>
+        <table class="fn-cap-table">
+          <thead>
+            <tr>
+              <th>Shareholder</th>
+              <th>Equity</th>
+              <th>Cash</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Promises Healthcare</td>
+              <td><span class="fn-equity">55%</span></td>
+              <td>SGD 300K + IP + brand licence</td>
+            </tr>
+            <tr>
+              <td>Lead Investor / SPV</td>
+              <td><span class="fn-equity">30%</span></td>
+              <td>SGD 4,200,000</td>
+            </tr>
+            <tr>
+              <td>Keith Wang</td>
+              <td><span class="fn-equity">10%</span></td>
+              <td>Sweat equity</td>
+            </tr>
+            <tr>
+              <td>ESOP Pool</td>
+              <td><span class="fn-equity">5%</span></td>
+              <td>Reserved — 4yr vest, 1yr cliff</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td><span class="fn-equity">100%</span></td>
+              <td>SGD 4.5M cash + IP</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Investor return profile -->
+      <div>
+        <div class="fn-section-label">Investor Return Profile</div>
+        <div class="fn-return-grid">
+          <div class="fn-return-item">
+            <div class="fn-return-label">Post-Money Valuation</div>
+            <div class="fn-return-value">SGD 14M</div>
+          </div>
+          <div class="fn-return-item">
+            <div class="fn-return-label">Year 1 Revenue</div>
+            <div class="fn-return-value fn-highlight">SGD 7.76M</div>
+          </div>
+          <div class="fn-return-item">
+            <div class="fn-return-label">Gross Margin</div>
+            <div class="fn-return-value fn-highlight">~99%</div>
+          </div>
+          <div class="fn-return-item">
+            <div class="fn-return-label">Break-Even</div>
+            <div class="fn-return-value">Month 15</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key investor messages -->
+      <div>
+        <div class="fn-section-label">Key Investor Messages</div>
+        <div class="fn-messages">
+          <div class="fn-message"><strong>36-month runway regardless of revenue.</strong> Every dollar from Month 7 onwards is additive — accelerates Shenzhen, funds second psychiatrist, builds outcomes dataset.</div>
+          <div class="fn-message"><strong>Break-even is a revenue threshold, not a cost exercise.</strong> Combined subscription and first consult revenue means the venture reaches break-even earlier than a subscription-only model. First consult revenue is front-loaded — collected at onboarding, not spread across 12 months.</div>
+          <div class="fn-message"><strong>No bridge round before Phase 2.</strong> SGD 4.5M covers 36 months fully funded. Shenzhen Phase 2 raises on proven metrics — patient volume, outcomes data, ARR — not projections.</div>
+          <div class="fn-message"><strong>Promises at 55% aligns incentives.</strong> They contribute clinical IP, brand, and SGD 300K cash. They have the most to lose and the most to gain. This alignment is a feature, not a risk.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 12 — INVESTOR LIST              -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Investor List</div>
+  </div>
+
+  <div class="slide-title">Faith-Aligned Investors<br><span>SGD 3M Founding Round</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="inv-context">
+    We are raising from investors who share our clinical mission — premium mental health care, responsibly delivered. All Tier 1 investors are verified faith-driven with healthcare and AI mandates in Southeast Asia.
+  </div>
+
+  <!-- Tier 1 -->
+  <div class="inv-tier-label inv-tier-1-label">🔴 Tier 1 — Highest Priority</div>
+  <div class="inv-grid inv-grid-3">
+
+    <div class="inv-card">
+      <div class="inv-card-priority">Priority 1 · Faith VC</div>
+      <div class="inv-card-name">Eagle Venture Fund Asia</div>
+      <div class="inv-card-type">Singapore office · Healthcare + AI + SEA mandate · Faith-driven, human flourishing focus</div>
+      <div class="inv-card-ask">SGD 500K–800K</div>
+      <div class="inv-card-approach">Direct — Singapore office. Strongest fit of any investor on this list. Verified faith mandate, healthcare named sector.</div>
+    </div>
+
+    <div class="inv-card">
+      <div class="inv-card-priority">Priority 2 · Faith VC</div>
+      <div class="inv-card-name">Kevin Sutantyo<br>Sovereign's Capital</div>
+      <div class="inv-card-type">SEA Partner · Invested in Grab, Xendit · Christian faith alignment via Faith Driven Investor network</div>
+      <div class="inv-card-ask">SGD 300K–500K</div>
+      <div class="inv-card-approach">Direct — Kevin is the SEA partner and the right door. Indonesia-based, bilingual, deep SEA network.</div>
+    </div>
+
+    <div class="inv-card">
+      <div class="inv-card-priority">Priority 3 · Christian FO</div>
+      <div class="inv-card-name">Far East Capital<br>(Ng Family FO)</div>
+      <div class="inv-card-type">Philip Ng declared FEO a Christian Enterprise · SGD 125M to Jurong Hospital · SGD 52M to TTSH</div>
+      <div class="inv-card-ask">SGD 500K–1M</div>
+      <div class="inv-card-approach">Direct — approach Far East Capital, not FEO corporate. Healthcare giving at scale confirms genuine healthcare interest.</div>
+    </div>
+
+  </div>
+
+  <!-- Tier 2 -->
+  <div class="inv-tier-label inv-tier-2-label">🟡 Tier 2 — Strong Warm Channels</div>
+  <div class="inv-grid inv-grid-3b">
+
+    <div class="inv-card t2">
+      <div class="inv-card-priority">Priority 4 · Network Channel</div>
+      <div class="inv-card-name">Sim Bock Eng<br>→ GFO Circle FOs</div>
+      <div class="inv-card-type">WongPartnership · Vice Chairman, WMI GFO Circle · Confirmed roundtable attendee 17 Jun</div>
+      <div class="inv-card-ask">Multiple smaller FOs</div>
+      <div class="inv-card-approach">Via June 17 roundtable relationship. One conversation, multiple Christian FO doors through GFO Circle network.</div>
+    </div>
+
+    <div class="inv-card t2">
+      <div class="inv-card-priority">Priority 5 · Angel + Connector</div>
+      <div class="inv-card-name">Chris Yeo<br>Digital Mission Venture</div>
+      <div class="inv-card-type">Founder of DOKU · Far East invested in DMV · Connected to FDI/FDE networks</div>
+      <div class="inv-card-ask">SGD 100–300K + introductions</div>
+      <div class="inv-card-approach">Direct. His network reaches all three Tier 1 investors. Commercial angel and warm connector to Christian FO community.</div>
+    </div>
+
+    <div class="inv-card t2">
+      <div class="inv-card-priority">Priority 6 · Warm Intro</div>
+      <div class="inv-card-name">Melissa Kwee<br>→ Pontiac Land FO</div>
+      <div class="inv-card-type">Kwee family explicitly Christian · Pontiac Land Group USD 1B+ · Camden Medical Centre</div>
+      <div class="inv-card-ask">Depends on FO appetite</div>
+      <div class="inv-card-approach">Via Melissa — not direct to FO. Right ask is an introduction to whoever manages Pontiac Land investment decisions.</div>
+    </div>
+
+  </div>
+
+  <!-- Tier 3 -->
+  <div class="inv-tier-label inv-tier-3-label">🟠 Tier 3 — Monitor / Verify</div>
+  <div class="inv-grid inv-grid-1">
+    <div class="inv-card t3">
+      <div class="inv-card-priority">Priority 7 · Single FO</div>
+      <div class="inv-card-name">Movement Family Office (Jerry)</div>
+      <div class="inv-card-type">Cannot verify from public sources. Jerry's Christian faith unverified independently. Single family office.</div>
+      <div class="inv-card-ask">Unknown</div>
+      <div class="inv-card-approach">Via direct relationship only. Do not approach without existing personal connection.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SLIDE 13 — RISKS & MITIGATIONS        -->
+<!-- ══════════════════════════════════════ -->
+<div class="page slide">
+  <div class="corner-mark"></div>
+  <div class="corner-mark-tl"></div>
+
+  <div class="slide-header">
+    <div class="slide-brand">Promises AI · China AI Practice</div>
+    <div class="slide-label">Risks &amp; Mitigations</div>
+  </div>
+
+  <div class="slide-title">Three Mission-Critical<br><span>Risks — And How We Address Them</span></div>
+  <div class="slide-divider"></div>
+
+  <div class="risk-body">
+
+    <div class="risk-row">
+      <div class="risk-num">1</div>
+      <div class="risk-left">
+        <div class="risk-title">AI Fails to Detect Suicidality</div>
+        <div class="risk-desc">The most serious clinical risk in any AI mental health product. A missed high-risk indicator before a crisis event is both a patient safety failure and an existential legal and reputational risk for the venture.</div>
+      </div>
+      <div class="risk-right">
+        <div class="risk-mit-label">Mitigation</div>
+        <div class="risk-mit-desc">
+          <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:5px;">
+            <li>9 months of pre-launch AI safety testing required — safety levels cleared by Promises' doctors before any patient sees the product</li>
+            <li>Escalation management dashboard built with timely alerts and crisis intervention protocols implemented before launch</li>
+            <li>In-person initial consultation and full intake form (with informed consent) required for all patients — flags high-risk cases before handing over to AI</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-divider"></div>
+
+    <div class="risk-row">
+      <div class="risk-num risk-cat-2-num">2</div>
+      <div class="risk-left">
+        <div class="risk-title">Difficulty Finding Qualified Psychiatrists in Shanghai</div>
+        <div class="risk-desc">China has approximately 4 psychiatrists per 100,000 people. Shanghai's premium private sector is a constrained talent market. An inability to hire and retain qualified psychiatrists creates a hard ceiling on clinical capacity and revenue growth.</div>
+      </div>
+      <div class="risk-right">
+        <div class="risk-mit-label">Mitigation</div>
+        <div class="risk-mit-desc">
+          <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:5px;">
+            <li>Develop a scalable tele-psychiatry team — not dependent on Shanghai in-person supply alone</li>
+            <li>Hire psychiatrists in Tier 2 cities (Chengdu, Xi'an) for remote tele-consultations — where ¥43K/month is a premium salary</li>
+            <li>Recruit Singapore psychiatrists through the Foreign Physician Short-term Practice Permit pathway — Promises Healthcare's 30-year hiring network is a structural advantage no competitor can replicate</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-divider"></div>
+
+    <div class="risk-row">
+      <div class="risk-num risk-cat-3-num">3</div>
+      <div class="risk-left">
+        <div class="risk-title">Delays in Algorithm Filing &amp; Security Assessment Clearance</div>
+        <div class="risk-desc">CAC algorithm registration must be completed before public launch. Delays in filing or government review could postpone launch, extend the pre-revenue burn period, and create regulatory uncertainty for investors.</div>
+      </div>
+      <div class="risk-right">
+        <div class="risk-mit-label">Mitigation</div>
+        <div class="risk-mit-desc">
+          <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:5px;">
+            <li>Establish a mandatory AI ethics committee — internal team plus an external government-backed partner in Shanghai — before filing</li>
+            <li>Engage Tina Liu (AllBright Law Offices) — specialist in medtech regulatory affairs — to manage and advise on all CAC filings from Month 1</li>
+            <li>Begin planning 9 months before intended launch — algorithm filing submitted in Month 4 of pre-launch period, well ahead of launch</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
