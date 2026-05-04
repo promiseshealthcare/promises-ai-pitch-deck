@@ -2631,125 +2631,52 @@ html, body {
   <div class="slide-title">A Scalable AI/Human Hybrid<br><span>Stepped Care Platform</span></div>
   <div class="slide-divider"></div>
 
-  <!-- TOP: Stepped Care Grid -->
-  <div class="sol-section-label">Stepped Care Model</div>
-  <div class="sol-grid">
-
-    <div class="sol-tier sol-tier-1">
+  <div class="sol-section-label">Clinical Stepped Care Model</div>
+  
+  <div style="display: grid; grid-template-columns: 220px 1fr; gap: 12px; margin-bottom: 32px;">
+    
+    <div class="sol-tier sol-tier-1" style="height: auto; align-items: flex-start; padding: 15px;">
       <div class="sol-tier-tag">Tier 1</div>
-      <div class="sol-tier-name">AI Therapy Agent</div>
+      <div class="sol-tier-name" style="font-size: 14px; margin-top: 5px;">AI CBT Agent<br>(WeChat)</div>
     </div>
-    <div class="sol-tier-desc">A structured clinical programme via WeChat. Each session follows a defined CBT module — Behavioural Activation, Thought Records, Cognitive Restructuring — in a warm, task-focused voice. Not open-ended conversation. PHQ-9 and GAD-7 collected at defined intervals. Deterioration flagged automatically to the clinical team.</div>
+    <div class="sol-tier-desc" style="display: block;">
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="margin-bottom: 6px;">· Asks structured questions to assess symptoms</li>
+        <li style="margin-bottom: 6px;">· Provides psychoeducation through structured CBT programmes</li>
+        <li style="margin-bottom: 6px;">· Escalates to human teams when risk is detected</li>
+        <li>· Does not mimic empathy or form emotional connections</li>
+      </ul>
+    </div>
 
-    <div class="sol-tier sol-tier-2">
+    <div class="sol-tier sol-tier-2" style="height: auto; align-items: flex-start; padding: 15px;">
       <div class="sol-tier-tag">Tier 2</div>
-      <div class="sol-tier-name">Consultant Psychiatrist</div>
+      <div class="sol-tier-name" style="font-size: 14px; margin-top: 5px;">Senior / Consultant<br>Psychiatrist</div>
     </div>
-    <div class="sol-tier-desc">PRC-licensed psychiatrist. Reviews AI-generated clinical summaries and flagged cases. One 15-minute monthly tele-consultation. Manages medication and standard presentations.</div>
+    <div class="sol-tier-desc" style="display: block;">
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="margin-bottom: 6px;">· Reviews escalations</li>
+        <li style="margin-bottom: 6px;">· Recommends treatment plans</li>
+        <li>· Offers one optional check-in monthly for 15 minutes</li>
+      </ul>
+    </div>
 
-    <div class="sol-tier sol-tier-3">
-      <div class="sol-tier-tag">Tier 3</div>
-      <div class="sol-tier-name">Senior Consultant Psychiatrist</div>
+    <div class="sol-tier sol-tier-3" style="height: auto; align-items: flex-start; padding: 15px;">
+      <div class="sol-tier-tag">Supervision</div>
+      <div class="sol-tier-name" style="font-size: 14px; margin-top: 5px;">Dr. Guo Song</div>
     </div>
-    <div class="sol-tier-desc">PRC-licensed senior psychiatrist. One 60-minute monthly tele-consultation. Manages complex cases requiring senior clinical judgment.</div>
+    <div class="sol-tier-desc" style="display: block;">
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="margin-bottom: 6px;">· Designs and governs AI clinical protocols with local clinicians</li>
+        <li>· Peer-to-peer consultation with local psychiatrists for complex cases</li>
+      </ul>
+    </div>
 
   </div>
 
-  <div class="sol-guo-bar">
-    <span class="sol-guo-name">Dr Guo Song — Chief Scientific Officer (Singapore)</span>
-    <span class="sol-guo-desc">Designs and governs AI clinical protocols with local clinicians. Peer-to-peer consultation with local psychiatrists for complex cases. Corporate governance role — not patient-facing in China.</span>
-  </div>
-
-  <!-- BOTTOM: Tech Stack — Limbic-style full width -->
-  <div class="sol-section-label" style="margin-bottom:10px;">AI Layer Architecture</div>
-  <div class="sol-diamond-section">
-
-    <!-- LEFT LABELS aligned to each diamond -->
-    <div class="sol-diamond-labels">
-      <div class="sol-diamond-label-item">
-        <div class="sol-diamond-label-name" style="color:var(--teal);">Patient Interface</div>
-        <div class="sol-diamond-label-sub">WeChat Mini-Program<br>Mandarin-native · WeChat Pay</div>
-      </div>
-      <div class="sol-diamond-label-item">
-        <div class="sol-diamond-label-name" style="color:var(--navy);">The Promises Layer</div>
-        <div class="sol-diamond-label-sub">Clinical AI — custom logic<br>enforcing all clinical boundaries</div>
-      </div>
-      <div class="sol-diamond-label-item">
-        <div class="sol-diamond-label-name" style="color:#9A7A2A;">LLM Engine</div>
-        <div class="sol-diamond-label-sub">DeepSeek V3 · or Emohaa CBT-Bot<br>China onshore · under evaluation</div>
-      </div>
-    </div>
-
-    <!-- CENTRE DIAMONDS -->
-    <div class="sol-diamond-centre">
-      <svg viewBox="0 0 220 320" xmlns="http://www.w3.org/2000/svg" width="220" height="320">
-
-        <!-- TOP DIAMOND — teal — WeChat -->
-        <rect x="42" y="4" width="100" height="100" rx="18"
-              transform="rotate(45 92 54)"
-              fill="rgba(42,127,111,0.10)" stroke="#2A7F6F" stroke-width="1.5"/>
-        <rect x="56" y="4" width="74" height="74" rx="13"
-              transform="rotate(45 93 54)"
-              fill="none" stroke="#2A7F6F" stroke-width="0.75" stroke-dasharray="4 3" opacity="0.5"/>
-        <text x="93" y="48" text-anchor="middle" dominant-baseline="middle"
-              font-family="DM Sans,sans-serif" font-size="24" font-weight="800"
-              fill="#2A7F6F" opacity="0.85">W</text>
-        <text x="93" y="66" text-anchor="middle"
-              font-family="DM Sans,sans-serif" font-size="7.5" font-weight="600"
-              fill="#2A7F6F" opacity="0.7" letter-spacing="0.08em">WECHAT</text>
-
-        <!-- MIDDLE DIAMOND — navy — Promises Layer -->
-        <rect x="42" y="108" width="100" height="100" rx="18"
-              transform="rotate(45 92 158)"
-              fill="rgba(13,27,42,0.08)" stroke="#0D1B2A" stroke-width="1.5"/>
-        <rect x="56" y="108" width="74" height="74" rx="13"
-              transform="rotate(45 93 158)"
-              fill="none" stroke="#0D1B2A" stroke-width="0.75" stroke-dasharray="4 3" opacity="0.4"/>
-        <text x="93" y="150" text-anchor="middle" dominant-baseline="middle"
-              font-family="'Josefin Sans',sans-serif" font-size="8.5" font-weight="400"
-              fill="#0D1B2A" letter-spacing="0.18em">PROMISES</text>
-        <text x="93" y="164" text-anchor="middle"
-              font-family="'Josefin Sans',sans-serif" font-size="7" font-weight="300"
-              fill="#0D1B2A" letter-spacing="0.14em" opacity="0.65">HEALTHCARE</text>
-
-        <!-- BOTTOM DIAMOND — gold — LLM Engine -->
-        <rect x="42" y="212" width="100" height="100" rx="18"
-              transform="rotate(45 92 262)"
-              fill="rgba(201,168,76,0.10)" stroke="#C9A84C" stroke-width="1.5"/>
-        <rect x="56" y="212" width="74" height="74" rx="13"
-              transform="rotate(45 93 262)"
-              fill="none" stroke="#C9A84C" stroke-width="0.75" stroke-dasharray="4 3" opacity="0.5"/>
-        <!-- DeepSeek icon -->
-        <image href="https://commons.wikimedia.org/wiki/Special:FilePath/Deepseek-logo-icon.svg"
-               x="70" y="238" width="44" height="44" opacity="0.85"/>
-        <text x="93" y="286" text-anchor="middle"
-              font-family="'Josefin Sans',sans-serif" font-size="7" font-weight="300"
-              fill="#9A7A2A" letter-spacing="0.1em" opacity="0.8">/ EMOHAA CBT-BOT</text>
-
-      </svg>
-    </div>
-
-    <!-- RIGHT EXPLANATION -->
-    <div class="sol-diamond-right">
-      <div class="sol-promises-box">
-        <div class="sol-promises-box-title">The Promises Layer</div>
-        <div class="sol-promises-box-text">Our clinical AI sits between the patient and the LLM. It structures every session around a defined CBT module — the LLM cannot deviate into open-ended emotional conversation. It enforces all clinical boundaries before any response reaches the patient.</div>
-        <div class="sol-promises-box-list">
-          <div class="sol-promises-box-item">PHQ-9 / GAD-7 scoring engine</div>
-          <div class="sol-promises-box-item">Crisis detection · human escalation triggers</div>
-          <div class="sol-promises-box-item">Session memory via Milvus vector database</div>
-          <div class="sol-promises-box-item">2-hour usage reminder · CAC content labeling</div>
-          <div class="sol-promises-box-item">PIPL-compliant · Tencent Cloud · China onshore</div>
-        </div>
-      </div>
-      <div class="sol-compliance-tags">
-        <div class="sol-compliance-tag">PIPL Compliant</div>
-        <div class="sol-compliance-tag">Tencent Cloud</div>
-        <div class="sol-compliance-tag">CAC Registered</div>
-        <div class="sol-compliance-tag">China Onshore</div>
-      </div>
-    </div>
-
+  <div class="sol-section-label" style="margin-bottom:15px;">AI Layer Architecture</div>
+  
+  <div style="display: flex; justify-content: center; align-items: center; background: white; border: 1px solid rgba(13,27,42,0.08); border-radius: 4px; padding: 20px;">
+    <img src="promises ai stack.jpg" alt="Promises AI Architecture Stack" style="max-width: 100%; height: 380px; object-fit: contain;">
   </div>
 
 </div>
